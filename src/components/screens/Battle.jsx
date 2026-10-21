@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { HEROES, VILLAINS } from '../../data/heroes.js'
 import { CLAUDIANIS_TIPS } from '../../data/claudianis.js'
-import { generateBattle } from '../../generators/index.js'
+import { generateBattle, generateFocusedBattle } from '../../generators/index.js'
 import { pick } from '../../generators/utils.js'
 import { soundEngine } from '../../audio/soundEngine.js'
 import Hearts from '../ui/Hearts.jsx'
@@ -78,6 +78,8 @@ const MESTRE_BATTLE_MSG = [
 export default function Battle({
   heroId,
   phase,
+  taskFocus,
+  externalQuestions,
   onWin,
   onLose,
   onBack,
@@ -89,7 +91,15 @@ export default function Battle({
   const isBoss = phase === 10
   const VillainArt = VILLAIN_ART_MAP[hero.villain]
 
-  const [questions] = useState(() => generateBattle(phase))
+  const [questions] = useState(() => {
+    if (externalQuestions && externalQuestions.length > 0) {
+      const shuffled = [...externalQuestions].sort(() => Math.random() - 0.5)
+      return shuffled.slice(0, 5).map(q => ({ ...q, questionType: 'external' }))
+    }
+    return taskFocus && taskFocus.length > 0
+      ? generateFocusedBattle(phase, taskFocus)
+      : generateBattle(phase)
+  })
   const [qIndex, setQIndex] = useState(0)
   const [hearts, setHearts] = useState(3)
   const heartsRef = useRef(3)
@@ -113,6 +123,7 @@ export default function Battle({
   useEffect(() => {
     if (!showingPrePhase && currentQ) {
       const type = currentQ.questionType
+      if (type === 'external') return
       if (!hasSeenFirstType(type)) {
         const tip = CLAUDIANIS_TIPS[type]?.firstTime
         if (tip) { setFirstTimeTip(tip); onMarkFirstType(type) }
@@ -235,7 +246,7 @@ export default function Battle({
             <div className="phase-rules">
               <span>5 perguntas</span>
               <Hearts count={3} max={3} />
-              <span>Frações · Problemas · Lógica</span>
+              <span>{externalQuestions ? '📚 Questões da Matéria' : 'Frações · Problemas · Lógica'}</span>
             </div>
           </div>
 
@@ -298,7 +309,7 @@ export default function Battle({
           </div>
           <div className="bvq-bubble-area">
             <span className={`q-type-badge-sm bg-${heroId}`}>
-              {{ fraction: '÷ Fração', problem: '📋 Problema', logic: '🧩 Lógica' }[currentQ?.questionType]}
+              {{ fraction: '÷ Fração', problem: '📋 Problema', logic: '🧩 Lógica', external: '📚 Matéria' }[currentQ?.questionType]}
             </span>
             <MangaBubble
               type="shout"
@@ -367,8 +378,8 @@ export default function Battle({
         />
       </div>
 
-      {/* ── HINT (only before answering) ── */}
-      {!answered && (
+      {/* ── HINT (only before answering, not for external questions) ── */}
+      {!answered && hint && (
         <div className="battle-hint-area">
           {hintVisible ? (
             <div className="battle-hint-open">

@@ -2562,3 +2562,73 @@ html, body {
   .prs-win-btns { padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px); }
 }
 
+
+/* -------------------------------------------------------
+   MISSION BANNER + MODAL
+------------------------------------------------------- */
+.mission-banner {
+  display: flex; align-items: center; gap: 0.75rem;
+  background: rgba(0,191,255,0.08);
+  border: 1px solid rgba(0,191,255,0.3);
+  border-radius: 12px;
+  padding: 0.55rem 1rem;
+  margin: 0.5rem;
+  flex-shrink: 0;
+}
+.mission-banner-icon { font-size: 1.3rem; }
+.mission-banner-text { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.mission-banner-type { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #00BFFF; font-weight: 700; }
+.mission-banner-title { font-size: 0.85rem; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mission-banner-focus { font-size: 0.72rem; color: rgba(255,255,255,0.6); }
+
+.mission-modal-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+.mission-modal {
+  background: #1a1a2e;
+  border: 1px solid rgba(0,191,255,0.3);
+  border-radius: 20px;
+  padding: 2rem 1.75rem;
+  max-width: 380px; width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+}
+.mission-modal-icon { font-size: 3rem; }
+.mission-modal-title { font-size: 1.3rem; font-weight: 900; color: #fff; }
+.mission-modal-sub { font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.5; }
+.mission-modal-err { color: #FF6666; font-size: 0.8rem; }
+.mission-modal-form { display: flex; flex-direction: column; gap: 0.6rem; width: 100%; }
+.mission-modal-input {
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+}
+.mission-modal-input:focus { border-color: rgba(0,191,255,0.5); }
+.mission-modal-btn {
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  border: none;
+  background: #00BFFF;
+  color: #000;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.mission-modal-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.mission-modal-skip { font-size: 0.78rem; color: rgba(255,255,255,0.4); background: none; border: none; cursor: pointer; padding: 0; }
+.mission-modal-skip:hover { color: rgba(255,255,255,0.7); }
+
+/* Barra de missão na sidebar */
+.dsk-mission-info { margin-top: 1rem; background: rgba(0,191,255,0.08); border: 1px solid rgba(0,191,255,0.2); border-radius: 10px; padding: 0.6rem 0.75rem; }
+.dsk-mission-label { display: block; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1px; color: #00BFFF; font-weight: 700; margin-bottom: 0.2rem; }
+.dsk-mission-wins { display: block; font-size: 0.9rem; font-weight: 800; color: #fff; }

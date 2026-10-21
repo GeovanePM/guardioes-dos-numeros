@@ -5,8 +5,8 @@ import { shuffle } from './utils.js'
 
 const TYPES = ['fraction', 'problem', 'logic']
 
-// Generate 5 questions for a battle, mixing all 3 types
-// Distribution: 2 fractions, 2 problems, 1 logic (or rotate)
+const FOCUS_TO_TYPE = { fracoes: 'fraction', problemas: 'problem', logica: 'logic' }
+
 const DISTRIBUTIONS = [
   ['fraction', 'problem', 'logic', 'fraction', 'problem'],
   ['fraction', 'logic', 'problem', 'fraction', 'logic'],
@@ -15,16 +15,33 @@ const DISTRIBUTIONS = [
   ['fraction', 'problem', 'fraction', 'logic', 'problem']
 ]
 
-export function generateBattle(phase) {
-  const dist = shuffle(DISTRIBUTIONS)[0]
+function makeQuestion(type, phase) {
+  if (type === 'fraction') return { ...generateFractionQuestion(phase), questionType: type }
+  if (type === 'problem')  return { ...generateProblemQuestion(phase),  questionType: type }
+  return { ...generateLogicQuestion(phase), questionType: type }
+}
 
-  return dist.map(type => {
-    let q
-    if (type === 'fraction') q = generateFractionQuestion(phase)
-    else if (type === 'problem') q = generateProblemQuestion(phase)
-    else q = generateLogicQuestion(phase)
-    return { ...q, questionType: type }
-  })
+export function generateBattle(phase) {
+  return shuffle(DISTRIBUTIONS)[0].map(type => makeQuestion(type, phase))
+}
+
+// focus: string[] de 'fracoes' | 'problemas' | 'logica' — pesa 3x os tipos focados
+export function generateFocusedBattle(phase, focus = []) {
+  if (!focus || focus.length === 0) return generateBattle(phase)
+
+  const focusedTypes = focus.map(f => FOCUS_TO_TYPE[f]).filter(Boolean)
+  const otherTypes   = TYPES.filter(t => !focusedTypes.includes(t))
+
+  // Weighted pool: focused 3x, others 1x
+  const pool = [...focusedTypes, ...focusedTypes, ...focusedTypes, ...otherTypes]
+  const picked = []
+  const used   = shuffle([...pool])
+
+  for (let i = 0; i < 5; i++) {
+    picked.push(used[i % used.length])
+  }
+
+  return picked.map(type => makeQuestion(type, phase))
 }
 
 export function generateSingleQuestion(type, phase) {
