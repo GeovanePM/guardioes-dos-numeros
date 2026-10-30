@@ -1333,6 +1333,35 @@ html, body {
 .stat-label { font-size: 0.82rem; font-weight: 700; color: var(--hero-color, #fff); }
 .stat-sub { font-size: 0.68rem; color: var(--text-secondary); }
 
+/* === PACTO DOS QUATRO (Ending) === */
+.ending-pact {
+  width: 100%;
+  background: rgba(0,0,0,0.35);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+}
+.pact-title { font-size: 1rem; font-weight: 800; color: #FFD700; margin-bottom: 4px; }
+.pact-sub   { font-size: 0.78rem; color: rgba(255,255,255,0.65); margin-bottom: 12px; }
+.pact-heroes { display: flex; flex-direction: column; gap: 8px; }
+.pact-hero-btn {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  background: rgba(0,0,0,0.4); border: 2px solid var(--btn-color,#fff);
+  border-radius: 12px; padding: 10px 14px; color: #fff; cursor: pointer;
+  text-align: left; transition: background .15s, transform .1s;
+}
+.pact-hero-btn:hover  { background: rgba(255,255,255,0.08); transform: scale(1.02); }
+.pact-hero-btn:active { transform: scale(0.98); }
+.pact-hero-icon     { font-size: 1.5rem; flex-shrink: 0; }
+.pact-hero-info     { display: flex; flex-direction: column; flex: 1; gap: 2px; }
+.pact-hero-name     { font-size: 0.95rem; font-weight: 800; color: var(--btn-color,#fff); }
+.pact-hero-progress { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
+.pact-hero-arrow    { font-size: 1.1rem; color: var(--btn-color,#fff); flex-shrink: 0; }
+.pact-complete       { text-align: center; }
+.pact-complete-title { font-size: 1.1rem; font-weight: 800; color: #FFD700; margin-bottom: 6px; }
+.pact-complete-sub   { font-size: 0.85rem; color: rgba(255,255,255,0.8); }
+
 /* === LOSE SCREEN === */
 .screen-lose {
   display: flex;
@@ -2628,7 +2657,145 @@ html, body {
 .mission-modal-skip { font-size: 0.78rem; color: rgba(255,255,255,0.4); background: none; border: none; cursor: pointer; padding: 0; }
 .mission-modal-skip:hover { color: rgba(255,255,255,0.7); }
 
-/* Barra de miss�o na sidebar */
+/* Barra de miss�o na sidebar */
 .dsk-mission-info { margin-top: 1rem; background: rgba(0,191,255,0.08); border: 1px solid rgba(0,191,255,0.2); border-radius: 10px; padding: 0.6rem 0.75rem; }
 .dsk-mission-label { display: block; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1px; color: #00BFFF; font-weight: 700; margin-bottom: 0.2rem; }
 .dsk-mission-wins { display: block; font-size: 0.9rem; font-weight: 800; color: #fff; }
+
+/* ============================================================
+   GALACTIC AUDIO — ENHANCED VISUALS
+   ============================================================ */
+
+/* ── Hero power rings (correct answer in battle) ── */
+.hero-power-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 3px solid var(--hero-color, #FFD700);
+  animation: heroPowerRing 0.85s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+.hero-power-ring-2 {
+  animation-delay: 0.18s;
+  opacity: 0.6;
+  border-width: 2px;
+}
+@keyframes heroPowerRing {
+  0%   { transform: scale(0.7); opacity: 1; }
+  100% { transform: scale(3.2); opacity: 0; }
+}
+
+/* ── Battle villain reactions — more impactful ── */
+.bfr-villain-hurt {
+  transform: translateX(14px) scale(0.88);
+  filter: brightness(2.5) saturate(0.2) contrast(1.5);
+  animation: villainHitFlash 0.55s ease;
+}
+@keyframes villainHitFlash {
+  0%   { filter: brightness(9) saturate(0) contrast(2); transform: translateX(20px) scale(0.80); }
+  18%  { filter: brightness(2.5) saturate(0.2);         transform: translateX(14px) scale(0.88); }
+  100% { filter: brightness(2.5) saturate(0.2);         transform: translateX(14px) scale(0.88); }
+}
+
+.bfr-villain-taunt {
+  animation: tauntLunge 0.62s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes tauntLunge {
+  0%   { transform: translateX(0)    scale(1)    rotate(0deg);  }
+  22%  { transform: translateX(-18px) scale(1.18) rotate(-6deg); }
+  50%  { transform: translateX(-10px) scale(1.12) rotate(4deg);  }
+  78%  { transform: translateX(-4px)  scale(1.05) rotate(-1deg); }
+  100% { transform: translateX(0)    scale(1)    rotate(0deg);  }
+}
+
+/* ── Phase result WIN — bigger, more dramatic hero ── */
+.prs-hero-victory-img {
+  width: clamp(170px, 46vw, 260px);
+  height: auto;
+  border-radius: 20px;
+  object-fit: contain;
+  object-position: top center;
+  filter: drop-shadow(0 0 28px var(--hero-color, rgba(255,200,0,0.7)));
+  animation: prsHeroGlow 1.4s ease-in-out infinite alternate, prsHeroEntrance 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes prsHeroEntrance {
+  0%   { transform: scale(0.6) translateY(30px); opacity: 0; }
+  70%  { transform: scale(1.06) translateY(-4px); }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+@keyframes prsHeroGlow {
+  from { filter: drop-shadow(0 0 20px var(--hero-color, rgba(255,200,0,0.5))); }
+  to   { filter: drop-shadow(0 0 44px var(--hero-color, rgba(255,200,0,1.0))) drop-shadow(0 0 80px var(--hero-color, rgba(255,200,0,0.3))); }
+}
+
+/* Light beam behind hero on win screen */
+.prs-hero-victory {
+  position: relative;
+  z-index: 2;
+  animation: prsHeroRise 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+.prs-hero-victory::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 320px;
+  background: radial-gradient(ellipse at bottom, var(--hero-color, rgba(255,200,0,0.35)) 0%, transparent 70%);
+  pointer-events: none;
+  animation: beamPulse 2s ease-in-out infinite alternate;
+  z-index: -1;
+}
+@keyframes beamPulse {
+  from { opacity: 0.4; transform: translateX(-50%) scaleX(0.7); }
+  to   { opacity: 1.0; transform: translateX(-50%) scaleX(1.3); }
+}
+
+/* Defeated villain on WIN screen — crumple animation */
+.prs-villain-defeated {
+  opacity: 0.90;
+}
+.prs-villain-defeated .prs-villain-art-wrap {
+  filter: grayscale(0.4) brightness(0.75);
+  animation: prsVillainIn 0.45s ease, prsVillainCrumple 1.1s ease 0.45s forwards;
+}
+@keyframes prsVillainCrumple {
+  0%   { transform: rotate(0deg)   scale(1);    filter: grayscale(0.4) brightness(0.75); }
+  30%  { transform: rotate(-14deg) scale(1.05); filter: grayscale(0.2) brightness(0.9);  }
+  60%  { transform: rotate(9deg)   scale(0.94); }
+  80%  { transform: rotate(-4deg)  scale(0.88); }
+  100% { transform: rotate(-22deg) scale(0.82); filter: grayscale(0.7) brightness(0.5); }
+}
+
+/* Triumphant villain on LOSE screen — intense red pulse */
+.prs-villain-triumphant .prs-villain-art-wrap {
+  animation: prsVillainIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275), villainThrob 1.1s ease-in-out 0.5s infinite alternate;
+}
+@keyframes villainThrob {
+  from { filter: drop-shadow(0 0 18px rgba(255,50,50,0.7)); transform: scale(1); }
+  to   { filter: drop-shadow(0 0 48px rgba(255,50,50,1.0)) drop-shadow(0 0 90px rgba(200,0,0,0.45)); transform: scale(1.03); }
+}
+
+/* ── Particles: more of them on win ── */
+.prs-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.prs-particle {
+  position: absolute;
+  width: var(--size, 8px);
+  height: var(--size, 8px);
+  background: var(--col, #FFD700);
+  border-radius: 2px;
+  animation: prsParticle 1.4s var(--delay, 0s) ease-out both;
+}
+@keyframes prsParticle {
+  0%   { transform: translate(0,0) rotate(0deg); opacity: 1; }
+  80%  { opacity: 0.7; }
+  100% { transform: translate(var(--x,0), var(--y,-80px)) rotate(var(--rot,360deg)); opacity: 0; }
+}

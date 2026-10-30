@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { HEROES, VILLAINS } from '../../data/heroes.js'
+import { HEROES, HERO_ORDER, VILLAINS } from '../../data/heroes.js'
 import { ENDINGS } from '../../data/stories.js'
 import MitosArt from '../art/MitosArt.jsx'
 import PampeeArt from '../art/PampeeArt.jsx'
@@ -10,7 +10,7 @@ import { SurtoArt, ImpasseArt, FragmentoArt, EclipseArt } from '../art/VillainAr
 const ART_MAP = { mitos: MitosArt, pampee: PampeeArt, galdios: GaldiosArt, nia: NiaArt }
 const VILLAIN_ART_MAP = { surto: SurtoArt, impasse: ImpasseArt, fragmento: FragmentoArt, eclipse: EclipseArt }
 
-export default function Ending({ heroId, onFinish }) {
+export default function Ending({ heroId, onFinish, progress = {}, onGoHero }) {
   const hero = HEROES[heroId]
   const villain = VILLAINS[hero.villain]
   const ending = ENDINGS[heroId]
@@ -33,6 +33,10 @@ export default function Ending({ heroId, onFinish }) {
   }
 
   if (showFinal) {
+    const otherHeroes = HERO_ORDER.filter(id => id !== heroId)
+    const incomplete = otherHeroes.filter(id => !(progress[id]?.ending))
+    const allDone = incomplete.length === 0
+
     return (
       <div
         className={`screen screen-ending bg-${heroId}`}
@@ -66,9 +70,52 @@ export default function Ending({ heroId, onFinish }) {
               <span className="stat-sub">Restaurado</span>
             </div>
           </div>
+
+          {/* Pacto dos Quatro — status dos outros heróis */}
+          <div className="ending-pact">
+            {allDone ? (
+              <div className="pact-complete">
+                <p className="pact-complete-title">🌟 PACTO DOS QUATRO CUMPRIDO! 🌟</p>
+                <p className="pact-complete-sub">Todos os Guardiões venceram! O universo está restaurado!</p>
+              </div>
+            ) : (
+              <>
+                <p className="pact-title">
+                  ⚔️ {incomplete.length} Guardião{incomplete.length > 1 ? 'ões precisam' : ' precisa'} da sua ajuda!
+                </p>
+                <p className="pact-sub">O universo só é restaurado quando todos os 4 vencerem.</p>
+                <div className="pact-heroes">
+                  {incomplete.map(id => {
+                    const h = HEROES[id]
+                    const phases = progress[id]?.phasesCompleted?.length || 0
+                    const nextPhase = (progress[id]?.maxPhaseUnlocked) || 1
+                    return (
+                      <button
+                        key={id}
+                        className="pact-hero-btn"
+                        style={{ '--btn-color': h.color, borderColor: h.color }}
+                        onClick={() => onGoHero?.(id)}
+                      >
+                        <span className="pact-hero-icon">{h.themeIcon}</span>
+                        <span className="pact-hero-info">
+                          <span className="pact-hero-name">{h.name}</span>
+                          <span className="pact-hero-progress">
+                            {phases === 0
+                              ? 'Ainda não começou'
+                              : `Fase ${nextPhase} — ${phases}/10 concluídas`}
+                          </span>
+                        </span>
+                        <span className="pact-hero-arrow">→</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+
           <button
-            className="btn btn-primary btn-large"
-            style={{ background: hero.color }}
+            className="btn btn-secondary"
             onClick={onFinish}
           >
             Voltar ao Mapa 🗺️

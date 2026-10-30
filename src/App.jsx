@@ -151,14 +151,14 @@ export default function App() {
     setScreen({ name: 'world-map', heroId, lastWonPhase: lastWonPhase || null })
   }
   function goPhase(heroId, phase) {
-    soundEngine.startTheme('battle')
+    soundEngine.stopBgMusic()          // silêncio durante a batalha
     setScreen({ name: 'battle', heroId, phase })
   }
 
   // ── resultados de batalha ────────────────────────────────────────────────────
   function handleBattleWin(heroId, phase, hearts, correctCount) {
     completePhase(heroId, phase, hearts, correctCount)
-    soundEngine.startTheme('worldMap')
+    soundEngine.startTheme('victory')  // música retorna somente na vitória
     setScreen({ name: 'phase-result', type: 'win', heroId, phase, hearts, correctCount })
 
     if (task && !taskRegistered) {
@@ -168,7 +168,7 @@ export default function App() {
     }
   }
   function handleBattleLose(heroId, phase) {
-    soundEngine.startTheme('worldMap')
+    soundEngine.stopBgMusic()          // sem música na tela de derrota
     setScreen({ name: 'phase-result', type: 'lose', heroId, phase, hearts: 0 })
   }
   function handleResultContinue(heroId, phase) {
@@ -245,7 +245,9 @@ export default function App() {
     if (s.name === 'ending') return (
       <Ending
         heroId={s.heroId}
+        progress={progress}
         onFinish={() => handleEndingFinish(s.heroId)}
+        onGoHero={(targetHeroId) => goWorldMap(targetHeroId)}
       />
     )
     return <StartScreen onStart={goHeroSelect} task={task} />

@@ -2,36 +2,30 @@ import { useState, useCallback } from 'react'
 
 const STORAGE_KEY = 'guardioes_progress_v1'
 
-const DEFAULT_HERO_PROGRESS = {
-  maxPhaseUnlocked: 1,
-  phasesCompleted: [],
-  comicsUnlocked: [],
-  xp: 0,
-  ending: false
+function freshHero() {
+  return { maxPhaseUnlocked: 1, phasesCompleted: [], comicsUnlocked: [], xp: 0, ending: false }
 }
 
-const DEFAULT_PROGRESS = {
-  mitos: { ...DEFAULT_HERO_PROGRESS },
-  pampee: { ...DEFAULT_HERO_PROGRESS },
-  galdios: { ...DEFAULT_HERO_PROGRESS },
-  nia: { ...DEFAULT_HERO_PROGRESS },
-  firstTypes: { fraction: false, problem: false, logic: false }
+function freshProgress() {
+  return {
+    mitos: freshHero(), pampee: freshHero(), galdios: freshHero(), nia: freshHero(),
+    firstTypes: { fraction: false, problem: false, logic: false }
+  }
 }
 
 function loadProgress() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return structuredClone(DEFAULT_PROGRESS)
+    if (!raw) return freshProgress()
     const parsed = JSON.parse(raw)
-    // Merge with defaults for any missing keys
-    const result = structuredClone(DEFAULT_PROGRESS)
+    const result = freshProgress()
     for (const hero of ['mitos', 'pampee', 'galdios', 'nia']) {
       if (parsed[hero]) Object.assign(result[hero], parsed[hero])
     }
     if (parsed.firstTypes) Object.assign(result.firstTypes, parsed.firstTypes)
     return result
   } catch {
-    return structuredClone(DEFAULT_PROGRESS)
+    return freshProgress()
   }
 }
 
@@ -44,7 +38,7 @@ function saveProgress(progress) {
 }
 
 export function useProgress() {
-  const [progress, setProgress] = useState(() => loadProgress())
+  const [progress, setProgress] = useState(loadProgress)
 
   const updateAndSave = useCallback((updater) => {
     setProgress(prev => {
@@ -98,13 +92,13 @@ export function useProgress() {
 
   const resetHero = useCallback((heroId) => {
     updateAndSave(prev => {
-      prev[heroId] = { ...DEFAULT_HERO_PROGRESS }
+      prev[heroId] = freshHero()
       return prev
     })
   }, [updateAndSave])
 
   const resetAll = useCallback(() => {
-    const fresh = structuredClone(DEFAULT_PROGRESS)
+    const fresh = freshProgress()
     saveProgress(fresh)
     setProgress(fresh)
   }, [])
