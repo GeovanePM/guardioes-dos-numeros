@@ -5,56 +5,33 @@ import { dirname } from 'path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ASSETS = resolve(__dirname, '../public/assets')
-const SRC = 'C:/Users/PROERD/Downloads/Gemini_Generated_Image_gtbmchgtbmchgtbm.jpg'
 
-const PANELS = [
-  { name: 'lucianis',  index: 0 },
-  { name: 'ludmilis',  index: 1 },
-  { name: 'gabrielis', index: 2 },
+const TARGET_W = 896
+const TARGET_H = 1200
+
+const SOURCES = [
+  { src: 'C:/Users/PROERD/Downloads/11.501.png', out: 'lucianis.png' },
+  { src: 'C:/Users/PROERD/Downloads/11.502.png', out: 'ludmilis.png' },
+  { src: 'C:/Users/PROERD/Downloads/11.503.png', out: 'gabrielis.png' },
 ]
 
-// Flood-fill from all 4 corners replacing checkered (gray/white neutral pixels) with white
-function removeCheckered(img) {
-  const w = img.getWidth()
-  const h = img.getHeight()
-  const data = img.bitmap.data
-  const visited = new Uint8Array(w * h)
+for (const { src, out } of SOURCES) {
+  const img = await Jimp.read(src)
 
-  function isNeutralGray(x, y) {
-    const i = (y * w + x) * 4
-    const r = data[i], g = data[i + 1], b = data[i + 2]
-    return r > 150 && g > 150 && b > 150 && Math.abs(r - g) < 25 && Math.abs(g - b) < 25
-  }
+  // Scale to fit inside TARGET_W x TARGET_H preserving aspect ratio
+  const scale = Math.min(TARGET_W / img.getWidth(), TARGET_H / img.getHeight())
+  const newW = Math.round(img.getWidth() * scale)
+  const newH = Math.round(img.getHeight() * scale)
+  img.resize(newW, newH)
 
-  function fill(sx, sy) {
-    if (!isNeutralGray(sx, sy)) return
-    const stack = [[sx, sy]]
-    while (stack.length) {
-      const [x, y] = stack.pop()
-      if (x < 0 || x >= w || y < 0 || y >= h) continue
-      if (visited[y * w + x]) continue
-      if (!isNeutralGray(x, y)) continue
-      visited[y * w + x] = 1
-      const i = (y * w + x) * 4
-      data[i] = 255; data[i + 1] = 255; data[i + 2] = 255
-      stack.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1])
-    }
-  }
+  // Center on white canvas
+  const canvas = new Jimp(TARGET_W, TARGET_H, 0xFFFFFFFF)
+  const x = Math.floor((TARGET_W - newW) / 2)
+  const y = Math.floor((TARGET_H - newH) / 2)
+  canvas.composite(img, x, y)
 
-  fill(0, 0); fill(w - 1, 0); fill(0, h - 1); fill(w - 1, h - 1)
-}
-
-const src = await Jimp.read(SRC)
-const totalW = src.getWidth()
-const totalH = src.getHeight()
-const panelW = Math.floor(totalW / 3)
-console.log(`Fonte: ${totalW}x${totalH} → cada painel: ${panelW}x${totalH}`)
-
-for (const { name, index } of PANELS) {
-  const panel = src.clone().crop(index * panelW, 0, panelW, totalH)
-  removeCheckered(panel)
-  const out = `${ASSETS}/${name}.png`
-  await panel.writeAsync(out)
-  console.log(`✓ ${name}.png`)
+  const outPath = `${ASSETS}/${out}`
+  await canvas.writeAsync(outPath)
+  console.log(`✓ ${out}  (${newW}x${newH} → ${TARGET_W}x${TARGET_H})`)
 }
 console.log('Pronto.')
