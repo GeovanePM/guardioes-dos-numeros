@@ -18,17 +18,18 @@ const SOURCES = [
 for (const { src, out } of SOURCES) {
   const img = await Jimp.read(src)
 
-  // Scale to fit inside TARGET_W x TARGET_H preserving aspect ratio
-  const scale = Math.min(TARGET_W / img.getWidth(), TARGET_H / img.getHeight())
+  // Scale to COVER TARGET_W x TARGET_H (fills entire canvas, crops excess)
+  const scale = Math.max(TARGET_W / img.getWidth(), TARGET_H / img.getHeight())
   const newW = Math.round(img.getWidth() * scale)
   const newH = Math.round(img.getHeight() * scale)
   img.resize(newW, newH)
 
-  // Center on white canvas
-  const canvas = new Jimp(TARGET_W, TARGET_H, 0xFFFFFFFF)
-  const x = Math.floor((TARGET_W - newW) / 2)
-  const y = Math.floor((TARGET_H - newH) / 2)
-  canvas.composite(img, x, y)
+  // Crop centered to exact TARGET dimensions
+  const cropX = Math.floor((newW - TARGET_W) / 2)
+  const cropY = Math.floor((newH - TARGET_H) / 2)
+  img.crop(cropX, cropY, TARGET_W, TARGET_H)
+
+  const canvas = img
 
   const outPath = `${ASSETS}/${out}`
   await canvas.writeAsync(outPath)
