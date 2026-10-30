@@ -1,15 +1,22 @@
 import { useState } from 'react'
 import { HEROES, HERO_ORDER } from '../../data/heroes.js'
-import { CLAUDIANIS_WELCOME } from '../../data/claudianis.js'
+import { TEACHERS } from '../../data/teachers.js'
 import ClaudianisArt from '../art/ClaudianisArt.jsx'
+import LucianisArt from '../art/LucianisArt.jsx'
+import LudmilisArt from '../art/LudmilisArt.jsx'
+import GabriielisArt from '../art/GabriielisArt.jsx'
 import MitosArt from '../art/MitosArt.jsx'
 import PampeeArt from '../art/PampeeArt.jsx'
 import GaldiosArt from '../art/GaldiosArt.jsx'
 import NiaArt from '../art/NiaArt.jsx'
 
-const ART_MAP = { mitos: MitosArt, pampee: PampeeArt, galdios: GaldiosArt, nia: NiaArt }
+const HERO_ART = { mitos: MitosArt, pampee: PampeeArt, galdios: GaldiosArt, nia: NiaArt }
+const TEACHER_ART = { lucianis: LucianisArt, ludmilis: LudmilisArt, gabrielis: GabriielisArt, claudianis: ClaudianisArt }
 
-const WELCOME_MSG = CLAUDIANIS_WELCOME[Math.floor(Math.random() * CLAUDIANIS_WELCOME.length)]
+function pickWelcome(teacherId) {
+  const msgs = TEACHERS[teacherId]?.welcome || []
+  return msgs[Math.floor(Math.random() * msgs.length)] || ''
+}
 
 function ResetModal({ progress, onResetHero, onResetAll, onClose }) {
   const [confirm, setConfirm] = useState(null) // null | 'hero:mitos' | 'all'
@@ -95,16 +102,26 @@ export default function HeroSelect({ onSelect, progress, onResetHero, onResetAll
   const [hovered, setHovered] = useState(null)
   const [showReset, setShowReset] = useState(false)
 
+  const activeTeacherId = hovered ? HEROES[hovered].teacher : 'claudianis'
+  const activeTeacher = TEACHERS[activeTeacherId]
+  const TeacherArt = TEACHER_ART[activeTeacherId]
+  const [welcomeMsg] = useState(() => ({
+    lucianis:  pickWelcome('lucianis'),
+    ludmilis:  pickWelcome('ludmilis'),
+    gabrielis: pickWelcome('gabrielis'),
+    claudianis: pickWelcome('claudianis'),
+  }))
+
   return (
     <div className="screen screen-hero-select">
-      {/* Claudianis welcome */}
+      {/* Barra da mestra — muda conforme o herói em foco */}
       <div className="claudianis-bar">
         <div className="claudianis-avatar-sm">
-          <ClaudianisArt size={72} />
+          <TeacherArt size={72} />
         </div>
         <div className="claudianis-welcome-bubble">
-          <p className="claudianis-name-sm">Mestre Claudianis</p>
-          <p>{WELCOME_MSG}</p>
+          <p className="claudianis-name-sm">{activeTeacher.name}</p>
+          <p>{welcomeMsg[activeTeacherId]}</p>
         </div>
         <button
           className="reset-gear-btn"
@@ -123,7 +140,9 @@ export default function HeroSelect({ onSelect, progress, onResetHero, onResetAll
           const hero = HEROES[heroId]
           const heroProgress = progress[heroId]
           const phasesCompleted = heroProgress?.phasesCompleted?.length || 0
-          const Art = ART_MAP[heroId]
+          const Art = HERO_ART[heroId]
+          const teacherId = hero.teacher
+          const teacher = TEACHERS[teacherId]
 
           return (
             <button
@@ -148,6 +167,7 @@ export default function HeroSelect({ onSelect, progress, onResetHero, onResetAll
                 <h3 className="hero-name">{hero.name}</h3>
                 <p className="hero-class">Turma {hero.className}</p>
                 <p className="hero-theme">{hero.themeIcon} {hero.theme}</p>
+                <p className="hero-teacher">👩‍🏫 {teacher.name}</p>
                 {phasesCompleted > 0 && (
                   <div className="hero-progress-mini">
                     <span className="progress-dots">

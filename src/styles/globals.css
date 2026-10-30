@@ -2903,3 +2903,11 @@ html, body {
   flex-direction: column;
   gap: 8px;
 }
+
+/* ── Hero card teacher tag ───────────────────────────────────────────────── */
+.hero-teacher {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  opacity: 0.85;
+}

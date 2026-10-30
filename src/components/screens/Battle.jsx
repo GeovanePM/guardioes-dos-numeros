@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { HEROES, VILLAINS } from '../../data/heroes.js'
-import { CLAUDIANIS_TIPS } from '../../data/claudianis.js'
+import { TEACHER_TIPS, TEACHERS } from '../../data/teachers.js'
 import { generateBattle, generateFocusedBattle } from '../../generators/index.js'
 import { pick } from '../../generators/utils.js'
 import { soundEngine } from '../../audio/soundEngine.js'
@@ -8,10 +8,14 @@ import Hearts from '../ui/Hearts.jsx'
 import HeroAvatar from '../ui/HeroAvatar.jsx'
 import FractionBar, { CompareBars } from '../ui/FractionBar.jsx'
 import ClaudianisArt from '../art/ClaudianisArt.jsx'
+import LucianisArt from '../art/LucianisArt.jsx'
+import LudmilisArt from '../art/LudmilisArt.jsx'
+import GabriielisArt from '../art/GabriielisArt.jsx'
 import { SurtoArt, ImpasseArt, FragmentoArt, EclipseArt } from '../art/VillainArt.jsx'
 import MangaBubble from '../ui/MangaBubble.jsx'
 
 const VILLAIN_ART_MAP = { surto: SurtoArt, impasse: ImpasseArt, fragmento: FragmentoArt, eclipse: EclipseArt }
+const TEACHER_ART_MAP = { lucianis: LucianisArt, ludmilis: LudmilisArt, gabrielis: GabriielisArt, claudianis: ClaudianisArt }
 
 // Messages for each reaction scenario
 const MESTRE_CORRECT = [
@@ -90,6 +94,8 @@ export default function Battle({
   const villain = VILLAINS[hero.villain]
   const isBoss = phase === 10
   const VillainArt = VILLAIN_ART_MAP[hero.villain]
+  const teacher = TEACHERS[hero.teacher] || TEACHERS.claudianis
+  const TeacherArt = TEACHER_ART_MAP[hero.teacher] || ClaudianisArt
 
   const [questions] = useState(() => {
     if (externalQuestions && externalQuestions.length > 0) {
@@ -125,7 +131,7 @@ export default function Battle({
       const type = currentQ.questionType
       if (type === 'external') return
       if (!hasSeenFirstType(type)) {
-        const tip = CLAUDIANIS_TIPS[type]?.firstTime
+        const tip = TEACHER_TIPS[type]?.firstTime
         if (tip) { setFirstTimeTip(tip); onMarkFirstType(type) }
       }
     }
@@ -219,9 +225,9 @@ export default function Battle({
                 </div>
               </div>
               <div className="mestre-counter">
-                <ClaudianisArt size={52} />
+                <TeacherArt size={52} />
                 <div className="mestre-counter-text">
-                  <span className="mestre-counter-name">Mestre Claudianis</span>
+                  <span className="mestre-counter-name">{teacher.name}</span>
                   <span className="mestre-counter-msg">{mestreMsg}</span>
                 </div>
               </div>
@@ -264,8 +270,8 @@ export default function Battle({
   }
 
   // ── BATTLE SCREEN ─────────────────────────────────────────────────
-  const hint = CLAUDIANIS_TIPS[currentQ?.questionType]
-    ? pick(CLAUDIANIS_TIPS[currentQ.questionType].hints)
+  const hint = TEACHER_TIPS[currentQ?.questionType]
+    ? pick(TEACHER_TIPS[currentQ.questionType].hints)
     : null
 
   return (
@@ -291,9 +297,9 @@ export default function Battle({
       {/* First-time type tip from Mestre */}
       {firstTimeTip && (
         <div className="battle-first-tip">
-          <ClaudianisArt size={40} />
+          <TeacherArt size={40} />
           <div className="battle-first-tip-text">
-            <span className="battle-first-tip-name">Mestre Claudianis</span>
+            <span className="battle-first-tip-name">{teacher.name}</span>
             <span className="battle-first-tip-msg">{firstTimeTip}</span>
           </div>
           <button className="battle-first-tip-close" onClick={() => setFirstTimeTip(null)}>✕</button>
@@ -352,7 +358,7 @@ export default function Battle({
 
           {/* Mestre side */}
           <div className="bfr-col bfr-mestre-col">
-            <ClaudianisArt size={68} />
+            <TeacherArt size={68} />
             <MangaBubble
               type={feedbackData.type === 'correct' ? 'speech' : 'thought'}
               tailSide="right"
@@ -361,7 +367,7 @@ export default function Battle({
               textColor={feedbackData.type === 'correct' ? '#AAFFBB' : '#FFE08A'}
               className="battle-manga-bubble bfr-mestre-manga"
             >
-              <span className="bfr-bubble-name">Mestre Claudianis</span>
+              <span className="bfr-bubble-name">{teacher.name}</span>
               <p className="bfr-bubble-msg">{feedbackData.mestreMsg}</p>
             </MangaBubble>
           </div>
@@ -383,7 +389,7 @@ export default function Battle({
         <div className="battle-hint-area">
           {hintVisible ? (
             <div className="battle-hint-open">
-              <ClaudianisArt size={38} />
+              <TeacherArt size={38} />
               <MangaBubble
                 type="thought"
                 bgColor="rgba(20,30,0,0.92)"
@@ -391,14 +397,14 @@ export default function Battle({
                 textColor="#CCFFCC"
                 className="battle-hint-manga"
               >
-                <span className="battle-hint-label">Mestre Claudianis</span>
+                <span className="battle-hint-label">{teacher.name}</span>
                 <p className="battle-hint-text">{hint}</p>
               </MangaBubble>
               <button className="battle-hint-close" onClick={() => setHintVisible(false)}>✕</button>
             </div>
           ) : (
             <button className="battle-hint-btn" onClick={() => setHintVisible(true)}>
-              💡 Pedir dica da Mestre
+              💡 Pedir dica de {teacher.name}
             </button>
           )}
         </div>
