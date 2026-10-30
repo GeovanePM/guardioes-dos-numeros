@@ -114,7 +114,7 @@ function MissionCompleteModal({ task, onRegister, onSkip }) {
 export default function App() {
   const [screen, setScreen] = useState({ name: 'start' })
   const [muted,  setMuted]  = useState(false)
-  const { progress, completePhase, markFirstType, hasSeenFirstType, getHeroProgress } = useProgress()
+  const { progress, completePhase, markFirstType, hasSeenFirstType, getHeroProgress, resetHero, resetAll } = useProgress()
 
   // missão
   const [taskId]          = useState(() => getUrlTaskId())
@@ -200,7 +200,7 @@ export default function App() {
   function renderScreen() {
     const s = screen
     if (s.name === 'start')       return <StartScreen onStart={goHeroSelect} task={task} />
-    if (s.name === 'hero-select') return <HeroSelect onSelect={goWorldMap} progress={progress} />
+    if (s.name === 'hero-select') return <HeroSelect onSelect={goWorldMap} progress={progress} onResetHero={resetHero} onResetAll={resetAll} />
     if (s.name === 'world-map')   return (
       <WorldMap
         heroId={s.heroId}

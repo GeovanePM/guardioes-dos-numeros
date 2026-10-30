@@ -2799,3 +2799,107 @@ html, body {
   80%  { opacity: 0.7; }
   100% { transform: translate(var(--x,0), var(--y,-80px)) rotate(var(--rot,360deg)); opacity: 0; }
 }
+
+/* ── Reset modal ─────────────────────────────────────────────────────────── */
+.reset-gear-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+  opacity: 0.7;
+  transition: opacity 0.2s, transform 0.2s;
+  line-height: 1;
+}
+.reset-gear-btn:hover { opacity: 1; transform: rotate(30deg); }
+
+.reset-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+}
+.reset-modal {
+  background: var(--bg-card);
+  border-radius: var(--border-radius);
+  padding: 24px 20px 20px;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-lg);
+}
+.reset-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+}
+.reset-sub {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.reset-empty {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 8px 0;
+}
+.reset-hero-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.reset-hero-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card2);
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: var(--border-radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  width: 100%;
+  text-align: left;
+  color: var(--text-primary);
+  font-family: inherit;
+}
+.reset-hero-item:hover { border-color: var(--hero-color); background: rgba(255,255,255,0.04); }
+.reset-hero-icon { font-size: 1.3rem; }
+.reset-hero-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.reset-hero-name { font-size: 0.95rem; font-weight: 600; }
+.reset-hero-phases { font-size: 0.78rem; color: var(--text-secondary); }
+.reset-hero-action {
+  font-size: 0.78rem;
+  color: #ff6b6b;
+  font-weight: 600;
+}
+.reset-all-btn { width: 100%; }
+.btn-danger {
+  background: linear-gradient(135deg, #ff4444, #cc0000);
+  color: white;
+  border: none;
+}
+.btn-danger:hover { background: linear-gradient(135deg, #ff6666, #ee2222); }
+
+.reset-confirm-icon { font-size: 2.5rem; text-align: center; }
+.reset-confirm-msg {
+  font-size: 0.95rem;
+  text-align: center;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+.reset-confirm-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
