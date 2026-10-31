@@ -4,6 +4,7 @@ import { STORIES } from './data/stories.js'
 import { HEROES } from './data/heroes.js'
 import { soundEngine } from './audio/soundEngine.js'
 import StartScreen from './components/screens/StartScreen.jsx'
+import OpeningScene from './components/screens/OpeningScene.jsx'
 import HeroSelect from './components/screens/HeroSelect.jsx'
 import WorldMap from './components/screens/WorldMap.jsx'
 import Battle from './components/screens/Battle.jsx'
@@ -142,6 +143,18 @@ export default function App() {
   }, [task])
 
   // ── navegação ────────────────────────────────────────────────────────────────
+  function goOpening() {
+    const seen = localStorage.getItem('guardioes_opening_seen')
+    if (seen) {
+      goHeroSelect()
+    } else {
+      setScreen({ name: 'opening' })
+    }
+  }
+  function finishOpening() {
+    localStorage.setItem('guardioes_opening_seen', '1')
+    goHeroSelect()
+  }
   function goHeroSelect() {
     soundEngine.startTheme('heroSelect')
     setScreen({ name: 'hero-select' })
@@ -199,7 +212,8 @@ export default function App() {
   // ── renderização ─────────────────────────────────────────────────────────────
   function renderScreen() {
     const s = screen
-    if (s.name === 'start')       return <StartScreen onStart={goHeroSelect} task={task} />
+    if (s.name === 'start')       return <StartScreen onStart={goOpening} task={task} />
+    if (s.name === 'opening')     return <OpeningScene onFinish={finishOpening} />
     if (s.name === 'hero-select') return <HeroSelect onSelect={goWorldMap} progress={progress} onResetHero={resetHero} onResetAll={resetAll} />
     if (s.name === 'world-map')   return (
       <WorldMap
