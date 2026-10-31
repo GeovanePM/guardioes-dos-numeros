@@ -4,7 +4,7 @@ export const STORIES = {
     {
       unlockedAfter: 2,
       title: 'O Ataque ao Vale Elétrico',
-      image: 'mitos_comic_1',
+      image: '/assets/comics/mitos_02.jpg',
       panels: [
         {
           speaker: 'Narrador',
@@ -19,7 +19,7 @@ export const STORIES = {
     {
       unlockedAfter: 4,
       title: 'Os Primeiros Circuitos Restaurados',
-      image: 'mitos_comic_2',
+      image: '/assets/comics/mitos_04.jpg',
       panels: [
         {
           speaker: 'Mitos',
@@ -34,7 +34,7 @@ export const STORIES = {
     {
       unlockedAfter: 6,
       title: 'A Tempestade dos Números',
-      image: 'mitos_comic_3',
+      image: '/assets/comics/mitos_06.jpg',
       panels: [
         {
           speaker: 'Surto',
@@ -49,7 +49,7 @@ export const STORIES = {
     {
       unlockedAfter: 8,
       title: 'O Núcleo do Caos',
-      image: 'mitos_comic_4',
+      image: '/assets/comics/mitos_08.jpg',
       panels: [
         {
           speaker: 'Narrador',
@@ -66,7 +66,7 @@ export const STORIES = {
     {
       unlockedAfter: 2,
       title: 'O Labirinto dos Enigmas',
-      image: 'pampee_comic_1',
+      image: '/assets/comics/pampee_02.jpg',
       panels: [
         {
           speaker: 'Narrador',
@@ -81,7 +81,7 @@ export const STORIES = {
     {
       unlockedAfter: 4,
       title: 'A Primeira Pista Revelada',
-      image: 'pampee_comic_2',
+      image: '/assets/comics/pampee_04.jpg',
       panels: [
         {
           speaker: 'Pampee',
@@ -96,7 +96,7 @@ export const STORIES = {
     {
       unlockedAfter: 6,
       title: 'O Enigma Duplicado',
-      image: 'pampee_comic_3',
+      image: '/assets/comics/pampee_06.jpg',
       panels: [
         {
           speaker: 'Impasse',
@@ -111,7 +111,7 @@ export const STORIES = {
     {
       unlockedAfter: 8,
       title: 'O Coração da Selva',
-      image: 'pampee_comic_4',
+      image: '/assets/comics/pampee_08.jpg',
       panels: [
         {
           speaker: 'Narrador',
@@ -128,7 +128,7 @@ export const STORIES = {
     {
       unlockedAfter: 2,
       title: 'A Fortaleza Ameaçada',
-      image: 'galdios_comic_1',
+      image: '/assets/comics/galdios_02.jpg',
       panels: [
         {
           speaker: 'Narrador',
@@ -143,7 +143,7 @@ export const STORIES = {
     {
       unlockedAfter: 4,
       title: 'O Escudo da Matemática',
-      image: 'galdios_comic_2',
+      image: '/assets/comics/galdios_04.jpg',
       panels: [
         {
           speaker: 'Galdios',
@@ -158,7 +158,7 @@ export const STORIES = {
     {
       unlockedAfter: 6,
       title: 'O Ataque dos Fragmentos',
-      image: 'galdios_comic_3',
+      image: '/assets/comics/galdios_06.jpg',
       panels: [
         {
           speaker: 'Fragmento',
@@ -173,7 +173,7 @@ export const STORIES = {
     {
       unlockedAfter: 8,
       title: 'A Sala do Trono',
-      image: 'galdios_comic_4',
+      image: '/assets/comics/galdios_08.jpg',
       panels: [
         {
           speaker: 'Narrador',
@@ -190,7 +190,7 @@ export const STORIES = {
     {
       unlockedAfter: 2,
       title: 'As Estrelas Apagadas',
-      image: 'nia_comic_1',
+      image: '/assets/comics/nia_02.jpg',
       panels: [
         {
           speaker: 'Narrador',
@@ -205,7 +205,7 @@ export const STORIES = {
     {
       unlockedAfter: 4,
       title: 'A Primeira Constelação',
-      image: 'nia_comic_2',
+      image: '/assets/comics/nia_04.jpg',
       panels: [
         {
           speaker: 'Nia',
@@ -220,7 +220,7 @@ export const STORIES = {
     {
       unlockedAfter: 6,
       title: 'O Grande Apagão',
-      image: 'nia_comic_3',
+      image: '/assets/comics/nia_06.jpg',
       panels: [
         {
           speaker: 'Eclipse',
@@ -235,7 +235,7 @@ export const STORIES = {
     {
       unlockedAfter: 8,
       title: 'O Centro do Eclipse',
-      image: 'nia_comic_4',
+      image: '/assets/comics/nia_08.jpg',
       panels: [
         {
           speaker: 'Narrador',
@@ -250,9 +250,20 @@ export const STORIES = {
   ]
 }
 
+export const OPENING = [
+  { image: '/assets/comics/abertura_01.jpg', text: 'O Comandante Caos lançou sua sombra sobre o Reino da Matemática...' },
+  { image: '/assets/comics/abertura_02.jpg', text: 'Quatro heróis respondem ao chamado. A batalha pelos números começa!' },
+]
+
+export const FINALE = [
+  { image: '/assets/comics/desfecho_01.jpg', text: 'Com os quatro vilões derrotados, o segredo do Comandante Caos é revelado...' },
+  { image: '/assets/comics/desfecho_02.jpg', text: 'Juntos, os Guardiões restauraram o Reino da Matemática para sempre!' },
+]
+
 export const ENDINGS = {
   mitos: {
     title: 'O Vale Elétrico Brilha!',
+    image: '/assets/comics/mitos_10.jpg',
     panels: [
       {
         speaker: 'Surto',
@@ -274,6 +285,7 @@ export const ENDINGS = {
   },
   pampee: {
     title: 'A Selva dos Enigmas Revelada!',
+    image: '/assets/comics/pampee_10.jpg',
     panels: [
       {
         speaker: 'Impasse',
@@ -295,6 +307,7 @@ export const ENDINGS = {
   },
   galdios: {
     title: 'A Fortaleza Está Intacta!',
+    image: '/assets/comics/galdios_10.jpg',
     panels: [
       {
         speaker: 'Fragmento',
@@ -316,6 +329,7 @@ export const ENDINGS = {
   },
   nia: {
     title: 'O Céu Estelar Reluz!',
+    image: '/assets/comics/nia_10.jpg',
     panels: [
       {
         speaker: 'Eclipse',
