@@ -1,174 +1,178 @@
 import { useState } from 'react'
-import { HEROES, HERO_ORDER, VILLAINS } from '../../data/heroes.js'
+import { HEROES, HERO_ORDER } from '../../data/heroes.js'
 import { ENDINGS } from '../../data/stories.js'
-import MitosArt from '../art/MitosArt.jsx'
-import PampeeArt from '../art/PampeeArt.jsx'
-import GaldiosArt from '../art/GaldiosArt.jsx'
-import NiaArt from '../art/NiaArt.jsx'
-import { SurtoArt, ImpasseArt, FragmentoArt, EclipseArt } from '../art/VillainArt.jsx'
-
-const ART_MAP = { mitos: MitosArt, pampee: PampeeArt, galdios: GaldiosArt, nia: NiaArt }
-const VILLAIN_ART_MAP = { surto: SurtoArt, impasse: ImpasseArt, fragmento: FragmentoArt, eclipse: EclipseArt }
 
 export default function Ending({ heroId, onFinish, progress = {}, onGoHero }) {
-  const hero = HEROES[heroId]
-  const villain = VILLAINS[hero.villain]
+  const hero   = HEROES[heroId]
   const ending = ENDINGS[heroId]
-  const HeroArt = ART_MAP[heroId]
-  const VillainArt = VILLAIN_ART_MAP[hero.villain]
   const [panelIndex, setPanelIndex] = useState(0)
-  const [showFinal, setShowFinal] = useState(false)
+  const [expanded,   setExpanded]   = useState(false)
+  const [imageZoom,  setImageZoom]  = useState(false)
+  const [showFinal,  setShowFinal]  = useState(false)
 
-  const panel = ending.panels[panelIndex]
-  const isLast = panelIndex >= ending.panels.length - 1
-  const isHero = panel.speaker === hero.name
-  const isVillain = panel.speaker === villain.name
-
-  function nextPanel() {
-    if (isLast) {
-      setShowFinal(true)
-    } else {
-      setPanelIndex(i => i + 1)
-    }
-  }
-
+  // ── Victory screen (after all panels) ───────────────────────────────────────
   if (showFinal) {
     const otherHeroes = HERO_ORDER.filter(id => id !== heroId)
-    const incomplete = otherHeroes.filter(id => !(progress[id]?.ending))
-    const allDone = incomplete.length === 0
+    const incomplete  = otherHeroes.filter(id => !(progress[id]?.ending))
+    const allDone     = incomplete.length === 0
 
     return (
-      <div
-        className={`screen screen-ending bg-${heroId}`}
-        style={{ '--hero-color': hero.color, '--hero-color-dark': hero.colorDark }}
-      >
-        <div className="ending-victory">
-          <div className="victory-stars">
-            {['⭐', '🌟', '✨', '⭐', '🌟'].map((s, i) => (
-              <span key={i} className="victory-star" style={{ animationDelay: `${i * 0.15}s` }}>{s}</span>
-            ))}
-          </div>
-          <div className="victory-art">
-            <HeroArt size={180} className="art-victory" />
-          </div>
-          <h2 className="victory-title">{ending.title}</h2>
-          <p className="victory-class">🏆 Turma {hero.className} — Missão Cumprida!</p>
-          <div className="victory-stats">
-            <div className="stat-box">
-              <span className="stat-icon">⚔️</span>
-              <span className="stat-label">10 Fases</span>
-              <span className="stat-sub">Concluídas</span>
-            </div>
-            <div className="stat-box">
-              <span className="stat-icon">💀</span>
-              <span className="stat-label">{villain.name}</span>
-              <span className="stat-sub">Derrotado</span>
-            </div>
-            <div className="stat-box">
-              <span className="stat-icon">{hero.themeIcon}</span>
-              <span className="stat-label">{hero.theme}</span>
-              <span className="stat-sub">Restaurado</span>
-            </div>
-          </div>
+      <div className="story-card-overlay">
+        <div className="story-card-compact" style={{ borderColor: `${hero.color}55`, maxWidth: 500 }}>
+          <div style={{ padding: '20px 16px 8px', textAlign: 'center' }}>
+            <div style={{ fontSize: '2.4rem', marginBottom: 6 }}>🏆</div>
+            <h2 style={{ color: hero.color, fontSize: '1.2rem', fontWeight: 800, margin: '0 0 4px' }}>
+              {ending.title}
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.82rem', margin: '0 0 14px' }}>
+              🏆 Turma {hero.className} — Missão Cumprida!
+            </p>
 
-          {/* Pacto dos Quatro — status dos outros heróis */}
-          <div className="ending-pact">
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 16 }}>
+              {[
+                { icon: '⚔️', label: '10 Fases', sub: 'Concluídas' },
+                { icon: hero.themeIcon, label: hero.theme, sub: 'Restaurado' },
+              ].map(({ icon, label, sub }) => (
+                <div key={label} style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '8px 14px', flex: 1 }}>
+                  <div style={{ fontSize: '1.3rem' }}>{icon}</div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#fff', marginTop: 2 }}>{label}</div>
+                  <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.5)' }}>{sub}</div>
+                </div>
+              ))}
+            </div>
+
             {allDone ? (
-              <div className="pact-complete">
-                <p className="pact-complete-title">🌟 PACTO DOS QUATRO CUMPRIDO! 🌟</p>
-                <p className="pact-complete-sub">Todos os Guardiões venceram! O universo está restaurado!</p>
+              <div style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.35)', borderRadius: 12, padding: '10px 14px', marginBottom: 14 }}>
+                <p style={{ color: '#FFD700', fontWeight: 800, fontSize: '0.88rem', margin: 0 }}>🌟 PACTO DOS QUATRO CUMPRIDO! 🌟</p>
+                <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.78rem', margin: '4px 0 0' }}>
+                  Todos os Guardiões venceram! O universo está restaurado!
+                </p>
               </div>
             ) : (
-              <>
-                <p className="pact-title">
+              <div style={{ marginBottom: 14 }}>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem', marginBottom: 8 }}>
                   ⚔️ {incomplete.length} Guardião{incomplete.length > 1 ? 'ões precisam' : ' precisa'} da sua ajuda!
                 </p>
-                <p className="pact-sub">O universo só é restaurado quando todos os 4 vencerem.</p>
-                <div className="pact-heroes">
-                  {incomplete.map(id => {
-                    const h = HEROES[id]
-                    const phases = progress[id]?.phasesCompleted?.length || 0
-                    const nextPhase = (progress[id]?.maxPhaseUnlocked) || 1
-                    return (
-                      <button
-                        key={id}
-                        className="pact-hero-btn"
-                        style={{ '--btn-color': h.color, borderColor: h.color }}
-                        onClick={() => onGoHero?.(id)}
-                      >
-                        <span className="pact-hero-icon">{h.themeIcon}</span>
-                        <span className="pact-hero-info">
-                          <span className="pact-hero-name">{h.name}</span>
-                          <span className="pact-hero-progress">
-                            {phases === 0
-                              ? 'Ainda não começou'
-                              : `Fase ${nextPhase} — ${phases}/10 concluídas`}
-                          </span>
+                {incomplete.map(id => {
+                  const h = HEROES[id]
+                  const phases = progress[id]?.phasesCompleted?.length || 0
+                  const next   = progress[id]?.maxPhaseUnlocked || 1
+                  return (
+                    <button key={id} onClick={() => onGoHero?.(id)}
+                      style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%',
+                        background: `${h.color}18`, border: `1.5px solid ${h.color}55`,
+                        borderRadius: 10, padding: '8px 12px', marginBottom: 6,
+                        color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
+                      <span style={{ fontSize: '1.2rem' }}>{h.themeIcon}</span>
+                      <span style={{ flex: 1, textAlign: 'left' }}>
+                        <span style={{ display: 'block', fontWeight: 700, fontSize: '0.85rem', color: h.color }}>{h.name}</span>
+                        <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.55)' }}>
+                          {phases === 0 ? 'Ainda não começou' : `Fase ${next} — ${phases}/10`}
                         </span>
-                        <span className="pact-hero-arrow">→</span>
-                      </button>
-                    )
-                  })}
-                </div>
-              </>
+                      </span>
+                      <span style={{ color: h.color }}>→</span>
+                    </button>
+                  )
+                })}
+              </div>
             )}
           </div>
 
-          <button
-            className="btn btn-secondary"
-            onClick={onFinish}
-          >
-            Voltar ao Mapa 🗺️
+          <button className="story-card-tap-btn"
+            style={{ borderColor: `${hero.color}70`, color: hero.color, background: `${hero.color}14` }}
+            onClick={onFinish}>
+            🗺️ Voltar ao Mapa
           </button>
         </div>
       </div>
     )
   }
 
+  const panel     = ending.panels[panelIndex]
+  const isLast    = panelIndex >= ending.panels.length - 1
+  const isNarrator = panel.speaker === 'Narrador'
+  const isHero    = panel.speaker === hero.name
+
+  function nextPanel() {
+    if (isLast) setShowFinal(true)
+    else { setPanelIndex(i => i + 1); setExpanded(false); setImageZoom(false) }
+  }
+
+  // ── Compact card ────────────────────────────────────────────────────────────
+  if (!expanded) {
+    return (
+      <div className="story-card-overlay">
+        <div className="story-card-compact" style={{ borderColor: `${hero.color}55` }}>
+          <div style={{ background: `${hero.color}18`, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: '1.1rem' }}>🏆</span>
+            <span style={{ color: hero.color, fontWeight: 800, fontSize: '0.82rem' }}>Final Desbloqueado!</span>
+          </div>
+          <img
+            src={ending.image}
+            alt={ending.title}
+            className="story-card-preview-img"
+            style={{ cursor: 'pointer' }}
+            onClick={() => setExpanded(true)}
+          />
+          <button
+            className="story-card-tap-btn"
+            style={{ borderColor: `${hero.color}70`, color: hero.color, background: `${hero.color}14` }}
+            onClick={() => setExpanded(true)}
+          >
+            🏆 Clique aqui para ler o final
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Expanded full-screen ─────────────────────────────────────────────────────
   return (
-    <div
-      className={`screen screen-ending screen-comic bg-${heroId}`}
-      style={{ '--hero-color': hero.color, '--hero-color-dark': hero.colorDark }}
-    >
-      <div className="comic-header">
-        <span className="comic-badge ending-badge">🏆 Final Desbloqueado!</span>
-        <h2 className="comic-title">{ending.title}</h2>
-        <span className="comic-pages">{panelIndex + 1}/{ending.panels.length}</span>
-      </div>
-
-      <div className="comic-frame comic-frame-ending">
-        <div className="comic-art-duo">
-          <div className={`art-duo-hero ${isHero ? 'art-spotlight' : 'art-dimmed'}`}>
-            <HeroArt size={110} />
-          </div>
-          <div className={`art-duo-villain ${isVillain ? 'art-spotlight villain-defeated' : 'art-dimmed'}`}>
-            <VillainArt size={90} />
-          </div>
+    <div className="story-screen-expanded" style={{ '--hero-color': hero.color }}>
+      {imageZoom && (
+        <div className="story-img-lightbox" onClick={() => setImageZoom(false)}>
+          <img src={ending.image} alt={ending.title} />
+          <button className="story-img-lightbox-close"
+            onClick={e => { e.stopPropagation(); setImageZoom(false) }}>✕</button>
         </div>
+      )}
 
-        <div className={`comic-bubble ${isHero ? 'bubble-hero' : isVillain ? 'bubble-villain' : 'bubble-narrator'}`}>
-          {panel.speaker !== 'Narrador' && (
-            <p className="bubble-speaker" style={isHero ? { color: hero.color } : { color: villain.color }}>
-              {panel.speaker}
-            </p>
-          )}
-          <p className="bubble-text">{panel.text}</p>
+      <div className="story-topbar">
+        <span className="story-chapter-tag">🏆 {ending.title}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span className="story-page-count">{panelIndex + 1}/{ending.panels.length}</span>
+          <button className="story-close-btn" onClick={() => setShowFinal(true)} aria-label="Pular para vitória">✕</button>
         </div>
       </div>
 
-      <div className="comic-nav">
-        <div className="comic-dots">
+      <div className="story-image-zoom-wrap" onClick={() => setImageZoom(true)}>
+        <img src={ending.image} alt={ending.title} className="story-image" />
+        <span className="story-image-zoom-hint">🔍 ampliar</span>
+      </div>
+
+      <div className={`story-dialogue ${isNarrator ? 'dlg-narrator' : isHero ? 'dlg-hero' : 'dlg-villain'}`}>
+        {!isNarrator && (
+          <span className="dlg-speaker" style={{ color: isHero ? hero.color : '#FF8888' }}>
+            {panel.speaker}
+          </span>
+        )}
+        <p className="dlg-text">{panel.text}</p>
+      </div>
+
+      <div className="story-nav">
+        <div className="story-dots">
           {ending.panels.map((_, i) => (
-            <span key={i} className={`comic-dot ${i === panelIndex ? 'comic-dot-active' : ''}`} style={i === panelIndex ? { background: hero.color } : {}} />
+            <span key={i}
+              className={`story-dot ${i === panelIndex ? 'story-dot-active' : ''}`}
+              style={i === panelIndex ? { background: hero.color } : {}}
+            />
           ))}
         </div>
-        <button
-          className="btn btn-primary btn-large"
-          style={{ background: hero.color }}
-          onClick={nextPanel}
-        >
+        <button className="btn btn-primary story-next-btn"
+          style={{ background: hero.color }} onClick={nextPanel}>
           {isLast ? '🏆 Ver vitória!' : 'Próximo →'}
         </button>
+        <button className="btn-skip" onClick={() => setShowFinal(true)}>Pular para vitória</button>
       </div>
     </div>
   )

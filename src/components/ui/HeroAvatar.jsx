@@ -13,14 +13,17 @@ const ART_MAP = {
 
 export default function HeroAvatar({ heroId, size = 160, reaction = null, phrase = null }) {
   const [animClass, setAnimClass] = useState('')
+  const [showRing, setShowRing] = useState(false)
 
   useEffect(() => {
     if (reaction === 'correct') {
       setAnimClass('hero-jump')
-      const t = setTimeout(() => setAnimClass(''), 800)
+      setShowRing(true)
+      const t = setTimeout(() => { setAnimClass(''); setShowRing(false) }, 900)
       return () => clearTimeout(t)
     } else if (reaction === 'wrong') {
       setAnimClass('hero-shake')
+      setShowRing(false)
       const t = setTimeout(() => setAnimClass(''), 600)
       return () => clearTimeout(t)
     }
@@ -36,7 +39,11 @@ export default function HeroAvatar({ heroId, size = 160, reaction = null, phrase
           <p>{phrase}</p>
         </div>
       )}
-      <ArtComponent size={size} className="hero-art" />
+      <div style={{ position: 'relative', display: 'inline-block' }}>
+        <ArtComponent size={size} className="hero-art" />
+        {showRing && <div className="hero-power-ring" />}
+        {showRing && <div className="hero-power-ring hero-power-ring-2" />}
+      </div>
     </div>
   )
 }

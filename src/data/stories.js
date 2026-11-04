@@ -256,8 +256,8 @@ export const OPENING = [
 ]
 
 export const FINALE = [
-  { image: '/assets/comics/desfecho_01.jpg', text: 'Com os quatro vilões derrotados, o segredo do Comandante Caos é revelado...' },
-  { image: '/assets/comics/desfecho_02.jpg', text: 'Juntos, os Guardiões restauraram o Reino da Matemática para sempre!' },
+  { image: '/assets/comics/desfecho_01.jpg', text: 'Com os quatro domínios livres, os Guardiões reuniram suas descobertas. Separados, seriam apenas fragmentos do segredo...' },
+  { image: '/assets/comics/desfecho_02.jpg', text: 'Juntos — cálculo, lógica, frações e sequências — os quatro poderes formam uma solução. O Pacto dos Quatro está completo. A aventura continua!' },
 ]
 
 export const ENDINGS = {

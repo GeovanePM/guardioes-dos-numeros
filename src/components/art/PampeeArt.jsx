@@ -1,7 +1,7 @@
 export default function PampeeArt({ size = 200, className = '' }) {
   return (
     <img
-      src="/assets/pampee.png"
+      src="/assets/pampee.jpg"
       alt="Pampee — Heroína da Selva dos Enigmas"
       width={size}
       height={size}

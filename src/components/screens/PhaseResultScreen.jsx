@@ -34,22 +34,22 @@ function pickMsg(arr) { return arr[Math.floor(Math.random() * arr.length)] }
 
 // ─── Star particles (win only) ───────────────────────────────────────────────
 function StarParticles({ color }) {
-  const colors = [color, '#FFD700', '#FFF', '#FF6B35', '#FF4EE0']
+  const colors = [color, '#FFD700', '#FFF', '#FF6B35', '#FF4EE0', '#00CFFF', color]
   return (
     <div className="prs-particles" aria-hidden="true">
-      {Array.from({ length: 18 }, (_, i) => (
+      {Array.from({ length: 32 }, (_, i) => (
         <div
           key={i}
           className="prs-particle"
           style={{
-            '--x': `${(Math.random() * 200 - 100).toFixed(0)}px`,
-            '--y': `${-(60 + Math.random() * 140).toFixed(0)}px`,
-            '--rot': `${(Math.random() * 720).toFixed(0)}deg`,
+            '--x': `${(Math.random() * 280 - 140).toFixed(0)}px`,
+            '--y': `${-(50 + Math.random() * 180).toFixed(0)}px`,
+            '--rot': `${(Math.random() * 900).toFixed(0)}deg`,
             '--col': colors[i % colors.length],
-            '--delay': `${(Math.random() * 0.4).toFixed(2)}s`,
-            '--size': `${5 + Math.floor(Math.random() * 7)}px`,
-            left: `${10 + Math.random() * 80}%`,
-            top: '55%',
+            '--delay': `${(Math.random() * 0.5).toFixed(2)}s`,
+            '--size': `${4 + Math.floor(Math.random() * 10)}px`,
+            left: `${5 + Math.random() * 90}%`,
+            top: `${40 + Math.random() * 30}%`,
           }}
         />
       ))}
@@ -88,7 +88,7 @@ export default function PhaseResultScreen({
     if (type === 'win') {
       soundEngine.playExplosion()
     } else {
-      soundEngine.playVillainLaugh()
+      soundEngine.playDefeat()
     }
   }, [])
 
@@ -138,7 +138,7 @@ export default function PhaseResultScreen({
         {/* Villain defeated (secondary) */}
         <div className="prs-villain-card prs-villain-defeated" aria-hidden="true">
           <div className="prs-villain-art-wrap prs-villain-sm">
-            <VillainArt size={96} />
+            <VillainArt size={130} />
           </div>
           <MangaBubble
             type="shout"
@@ -197,7 +197,7 @@ export default function PhaseResultScreen({
       {/* Villain large, centered, triumphant */}
       <div className="prs-villain-card prs-villain-triumphant" aria-hidden="true">
         <div className="prs-villain-art-wrap prs-villain-big">
-          <VillainArt size={220} />
+          <VillainArt size={260} />
         </div>
         <MangaBubble
           type="shout"

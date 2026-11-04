@@ -56,6 +56,7 @@ export default function WorldMap({ heroId, heroProgress, onBattle, onBack, lastW
   const VillainArtComp = VILLAIN_ART[hero.villain]
 
   const completed = heroProgress?.phasesCompleted || []
+  const maxUnlocked = heroProgress?.maxPhaseUnlocked || 1
   const [pos, setPos] = useState({ ...HERO_START })
   const [confirm, setConfirm] = useState(null)
   const [winBanner, setWinBanner] = useState(lastWonPhase || null)
@@ -72,8 +73,8 @@ export default function WorldMap({ heroId, heroProgress, onBattle, onBack, lastW
   const tileSize = Math.min(Math.floor((Math.min(window.innerWidth, 600) - 24) / COLS), 50)
 
   const spotAt = useCallback((r, c) =>
-    SPOTS.find(s => s.row === r && s.col === c && !completed.includes(s.phase))
-  , [completed])
+    SPOTS.find(s => s.row === r && s.col === c && !completed.includes(s.phase) && s.phase <= maxUnlocked)
+  , [completed, maxUnlocked])
 
   const move = useCallback((dr, dc) => {
     setPos(cur => {
@@ -206,7 +207,8 @@ export default function WorldMap({ heroId, heroProgress, onBattle, onBack, lastW
         {MAP.map((row, r) => row.map((tile, c) => {
           const spot = SPOTS.find(s => s.row === r && s.col === c)
           const isDefeated = spot && completed.includes(spot.phase)
-          const isActive   = spot && !completed.includes(spot.phase)
+          const isLocked   = spot && !completed.includes(spot.phase) && spot.phase > maxUnlocked
+          const isActive   = spot && !completed.includes(spot.phase) && spot.phase <= maxUnlocked
           const isBoss     = spot?.phase === 10
           const isHero     = pos.row === r && pos.col === c
 
@@ -227,6 +229,17 @@ export default function WorldMap({ heroId, heroProgress, onBattle, onBack, lastW
                 <span style={{ fontSize: tileSize * 0.52, lineHeight: 1 }}>
                   {TREE_EMOJI[heroId]}
                 </span>
+              )}
+
+              {/* Locked villain — not yet reachable */}
+              {isLocked && !isHero && (
+                <div className="wm-villain wm-villain-locked"
+                  style={{ width: tileSize - 2, height: tileSize - 2, opacity: 0.35 }}>
+                  <span style={{ fontSize: tileSize * 0.42 }}>🔒</span>
+                  <span className="wm-badge" style={{ background: 'rgba(0,0,0,0.75)' }}>
+                    {spot.phase}
+                  </span>
+                </div>
               )}
 
               {/* Active villain */}

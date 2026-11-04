@@ -22,6 +22,7 @@ export default function PhaseMap({ heroId, heroProgress, onPhaseSelect, onBack }
   const maxUnlocked = heroProgress?.maxPhaseUnlocked || 1
   const completed = heroProgress?.phasesCompleted || []
   const xp = heroProgress?.xp || 0
+  const totalCorrect = heroProgress?.totalCorrect || 0
   const ending = heroProgress?.ending || false
 
   return (
@@ -39,6 +40,8 @@ export default function PhaseMap({ heroId, heroProgress, onPhaseSelect, onBack }
         <div className="map-xp">
           <span className="xp-icon">⭐</span>
           <span className="xp-value">{xp} XP</span>
+          <span className="xp-icon" style={{ marginLeft: 8 }}>✅</span>
+          <span className="xp-value">{totalCorrect}</span>
         </div>
       </div>
 

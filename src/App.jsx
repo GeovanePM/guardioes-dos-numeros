@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useProgress } from './hooks/useProgress.js'
-import { STORIES } from './data/stories.js'
+import { STORIES, FINALE } from './data/stories.js'
 import { HEROES } from './data/heroes.js'
 import { soundEngine } from './audio/soundEngine.js'
 import StartScreen from './components/screens/StartScreen.jsx'
@@ -111,6 +111,43 @@ function MissionCompleteModal({ task, onRegister, onSkip }) {
   )
 }
 
+// ── Error boundary ─────────────────────────────────────────────────────────────
+// Silently retries up to 2x per error event; resets counter after each recovery.
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state  = { hasError: false, error: null }
+    this._retry = 0
+  }
+  static getDerivedStateFromError(e) { return { hasError: true, error: e } }
+  componentDidUpdate(_, prevState) {
+    // After a successful recovery, reset retry count for the next error event
+    if (prevState.hasError && !this.state.hasError) this._retry = 0
+  }
+  componentDidCatch() {
+    if (this._retry < 2) {
+      this._retry++
+      setTimeout(() => this.setState({ hasError: false, error: null }), 80)
+    }
+  }
+  render() {
+    if (this.state.hasError && this._retry >= 2) return (
+      <div style={{ position: 'fixed', inset: 0, background: '#1a0000', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, zIndex: 9999, color: '#ff8888', fontFamily: 'monospace' }}>
+        <div style={{ fontSize: '2rem', marginBottom: 12 }}>⚠️ Erro</div>
+        <div style={{ fontSize: '0.85rem', wordBreak: 'break-all', maxWidth: 360, textAlign: 'center' }}>
+          {this.state.error?.message || String(this.state.error)}
+        </div>
+        <button onClick={() => { this._retry = 0; this.setState({ hasError: false, error: null }) }}
+          style={{ marginTop: 20, padding: '10px 24px', background: '#cc0000', color: '#fff', border: 'none', borderRadius: 8, fontSize: '1rem', cursor: 'pointer' }}>
+          Tentar novamente
+        </button>
+      </div>
+    )
+    if (this.state.hasError) return null
+    return this.props.children
+  }
+}
+
 // ── App principal ─────────────────────────────────────────────────────────────
 export default function App() {
   const [screen, setScreen] = useState({ name: 'start' })
@@ -144,15 +181,9 @@ export default function App() {
 
   // ── navegação ────────────────────────────────────────────────────────────────
   function goOpening() {
-    const seen = localStorage.getItem('guardioes_opening_seen')
-    if (seen) {
-      goHeroSelect()
-    } else {
-      setScreen({ name: 'opening' })
-    }
+    setScreen({ name: 'opening' })
   }
   function finishOpening() {
-    localStorage.setItem('guardioes_opening_seen', '1')
     goHeroSelect()
   }
   function goHeroSelect() {
@@ -187,7 +218,7 @@ export default function App() {
   function handleResultContinue(heroId, phase) {
     const comicPhases = [2, 4, 6, 8]
     const heroStories = STORIES[heroId] || []
-    if (phase === 10) { setScreen({ name: 'ending', heroId }); return }
+    if (phase === 10) { setScreen({ name: 'finale', heroId }); return }
     if (comicPhases.includes(phase)) {
       const comicIndex = comicPhases.indexOf(phase)
       if (comicIndex < heroStories.length) {
@@ -256,6 +287,13 @@ export default function App() {
         onContinue={() => goWorldMap(s.heroId, s.lastWonPhase)}
       />
     )
+    if (s.name === 'finale') return (
+      <OpeningScene
+        panels={FINALE}
+        chapterTag="📖 O Pacto dos Quatro"
+        onFinish={() => setScreen({ name: 'ending', heroId: s.heroId })}
+      />
+    )
     if (s.name === 'ending') return (
       <Ending
         heroId={s.heroId}
@@ -297,7 +335,7 @@ export default function App() {
 
       <div className="app-main">
         {task && <MissionBanner task={task} />}
-        {renderScreen()}
+        <ErrorBoundary>{renderScreen()}</ErrorBoundary>
         {screen.name !== 'start' && (
           <button
             className={`btn-mute btn-mute-float${muted ? ' muted' : ''}`}
@@ -330,6 +368,7 @@ export default function App() {
             <p className="dsk-phases-done">
               {(heroProgress.phasesCompleted || []).length}/10 fases
             </p>
+            <p className="dsk-xp">✅ {heroProgress.totalCorrect || 0} acertos</p>
             {screen.phase && (
               <div className="dsk-phase-now" style={{ borderColor: hero.color }}>
                 <span className="dsk-phase-now-label">Fase atual</span>

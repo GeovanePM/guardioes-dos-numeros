@@ -246,7 +246,6 @@ export default function Battle({
             ) : (
               <>
                 <h2 className="phase-title">Fase {phase}</h2>
-                <p className="phase-subtitle">{hero.themeIcon} {hero.theme}</p>
               </>
             )}
             <div className="phase-rules">
@@ -291,7 +290,7 @@ export default function Battle({
 
       {/* Progress bar */}
       <div className="battle-progress-bar">
-        <div className="battle-progress-fill" style={{ width: `${(qIndex / 5) * 100}%`, background: hero.color }} />
+        <div className="battle-progress-fill" style={{ width: `${((qIndex + (answered ? 1 : 0)) / 5) * 100}%`, background: hero.color }} />
       </div>
 
       {/* First-time type tip from Mestre */}
