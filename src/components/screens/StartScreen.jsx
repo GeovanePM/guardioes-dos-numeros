@@ -7,9 +7,24 @@ export default function StartScreen({ onStart }) {
     const audio = new Audio('/assets/landing_music.mp3')
     audio.loop = true
     audio.volume = 0.75
-    audio.play().catch(() => {})
     audioRef.current = audio
-    return () => { audio.pause(); audio.src = '' }
+
+    const tryPlay = () => {
+      if (audio.paused) audio.play().catch(() => {})
+    }
+
+    audio.play().catch(() => {
+      // Mobile browsers block autoplay — play on first user interaction
+      document.addEventListener('touchstart', tryPlay, { once: true })
+      document.addEventListener('click', tryPlay, { once: true })
+    })
+
+    return () => {
+      audio.pause()
+      audio.src = ''
+      document.removeEventListener('touchstart', tryPlay)
+      document.removeEventListener('click', tryPlay)
+    }
   }, [])
 
   function handleStart() {
