@@ -61,15 +61,16 @@ html, body {
   padding: 24px;
 }
 
-/* Variante com capa do gibi */
+/* Variante com capa do gibi — anchored to viewport, no scroll */
 .screen-start-cover {
+  position: fixed;
+  inset: 0;
+  max-width: none;
+  min-height: unset;
   background: #000;
   padding: 0;
   justify-content: flex-end;
   align-items: stretch;
-  /* Extend behind status bar + home indicator on iOS */
-  min-height: 100vh;
-  min-height: 100dvh;
 }
 
 .start-cover-bg {
@@ -78,7 +79,7 @@ html, body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center center;
+  object-position: center 20%;
   pointer-events: none;
 }
 
@@ -87,8 +88,8 @@ html, body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 55%;
-  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+  height: 50%;
+  background: linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.65) 45%, transparent 100%);
   pointer-events: none;
 }
 
@@ -1885,14 +1886,10 @@ html, body {
 }
 
 /* === SAFE AREA FOR MOBILE (viewport-fit=cover) === */
-.screen {
+/* Cover screen is position:fixed and handles safe areas in .start-cover-content */
+.screen:not(.screen-start-cover) {
   padding-top: env(safe-area-inset-top, 0);
   padding-bottom: env(safe-area-inset-bottom, 0);
-}
-/* Cover screen extends intentionally behind notch and home bar */
-.screen-start-cover {
-  padding-top: 0;
-  padding-bottom: 0;
 }
 
 /* ============================================================
