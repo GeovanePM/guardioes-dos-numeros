@@ -1,9 +1,23 @@
+import { useEffect } from 'react'
 import { soundEngine } from '../../audio/soundEngine.js'
 
 export default function StartScreen({ onStart }) {
+  useEffect(() => {
+    // Inicia música no primeiro toque/clique — desbloqueia AudioContext em mobile/tablet
+    function unlock() {
+      document.removeEventListener('touchstart', unlock)
+      document.removeEventListener('click', unlock)
+      soundEngine.startTheme('opening')
+    }
+    document.addEventListener('touchstart', unlock)
+    document.addEventListener('click', unlock)
+    return () => {
+      document.removeEventListener('touchstart', unlock)
+      document.removeEventListener('click', unlock)
+    }
+  }, [])
+
   function handleStart() {
-    // Button click = user gesture; Web Audio API starts reliably on all devices
-    soundEngine.startTheme('opening')
     onStart()
   }
 
