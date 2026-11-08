@@ -2676,22 +2676,25 @@ html, body {
   .wm-dpad { margin-bottom: max(env(safe-area-inset-bottom, 0px), 6px); }
   .prs-win-btns { padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px); }
 
-  /* Mobile: cover.jpg é portrait 1054×1492. Com cover escala pela altura
-     e recorta ~17% das bordas horizontais (personagens somem).
-     Contain mostra a imagem completa com fundo escuro abaixo. */
+  /* Prevent button overflow on medium-small phones */
+  .start-cover-btn {
+    max-width: calc(100vw - 48px);
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+/* cover.jpg é portrait 1054×1492. Em viewports < 1024px com object-fit:cover
+   a imagem escala pela altura e recorta as bordas horizontais (personagens somem)
+   OU em viewports landscape recorta a parte superior. Contain exibe a imagem
+   completa em todos os tamanhos de viewport não-desktop. */
+@media (max-width: 1023px) {
   .start-cover-bg {
     object-fit: contain;
     object-position: center 6%;
   }
   .screen-start-cover {
     background: linear-gradient(180deg, #060612 0%, #12001e 55%, #000 100%);
-  }
-
-  /* Prevent button overflow on medium-small phones */
-  .start-cover-btn {
-    max-width: calc(100vw - 48px);
-    padding-left: 32px;
-    padding-right: 32px;
   }
 }
 

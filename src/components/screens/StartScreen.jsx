@@ -40,7 +40,7 @@ export default function StartScreen({ onStart }) {
         </div>
       ) : (
         <div className="start-tap-hint">
-          🎵 Toque na tela para começar
+          🎵 Toque aqui para iniciar
         </div>
       )}
     </div>

@@ -92,12 +92,19 @@ class SoundEngine {
 
   startTheme(name) {
     if (!this._init()) return
-    this._resume()
-    if (this._theme === name && this._loopActive) return
-    this._stopLoop()
-    this._theme = name
-    this._loopActive = true
-    this._playTheme()
+    const play = () => {
+      if (this._theme === name && this._loopActive) return
+      this._stopLoop()
+      this._theme = name
+      this._loopActive = true
+      this._playTheme()
+    }
+    // AudioContext.resume() é assíncrono — aguarda antes de tocar (fix iPad/iOS)
+    if (this.ctx.state !== 'running') {
+      this.ctx.resume().then(play).catch(play)
+    } else {
+      play()
+    }
   }
 
   _stopLoop() {
