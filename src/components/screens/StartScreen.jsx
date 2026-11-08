@@ -1,13 +1,16 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { soundEngine } from '../../audio/soundEngine.js'
 
 export default function StartScreen({ onStart }) {
+  const [unlocked, setUnlocked] = useState(false)
+
   useEffect(() => {
-    // Inicia música no primeiro toque/clique — desbloqueia AudioContext em mobile/tablet
+    if (unlocked) return
     function unlock() {
       document.removeEventListener('touchstart', unlock)
       document.removeEventListener('click', unlock)
       soundEngine.startTheme('opening')
+      setUnlocked(true)
     }
     document.addEventListener('touchstart', unlock)
     document.addEventListener('click', unlock)
@@ -15,33 +18,31 @@ export default function StartScreen({ onStart }) {
       document.removeEventListener('touchstart', unlock)
       document.removeEventListener('click', unlock)
     }
-  }, [])
-
-  function handleStart() {
-    onStart()
-  }
+  }, [unlocked])
 
   return (
     <div className="screen screen-start screen-start-cover">
-      {/* Capa do gibi preenche a tela */}
       <img
         src="/assets/cover.jpg"
         alt="Guardiões dos Números — Heróis da Matemática"
         className="start-cover-bg"
       />
-
-      {/* Gradiente inferior para legibilidade */}
       <div className="start-cover-gradient" />
 
-      {/* Botão e rodapé sobre a capa */}
-      <div className="start-cover-content">
-        <button className="btn-start start-cover-btn" onClick={handleStart}>
-          ⚔️ Jogar Agora!
-        </button>
-        <p className="start-footer">
-          Turmas 11.501 · 11.502 · 11.503 · 11.504
-        </p>
-      </div>
+      {unlocked ? (
+        <div className="start-cover-content start-cover-content-in">
+          <button className="btn-start start-cover-btn" onClick={onStart}>
+            ⚔️ Jogar Agora!
+          </button>
+          <p className="start-footer">
+            Turmas 11.501 · 11.502 · 11.503 · 11.504
+          </p>
+        </div>
+      ) : (
+        <div className="start-tap-hint">
+          🎵 Toque na tela para começar
+        </div>
+      )}
     </div>
   )
 }

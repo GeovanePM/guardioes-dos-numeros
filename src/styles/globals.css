@@ -2676,6 +2676,17 @@ html, body {
   .wm-dpad { margin-bottom: max(env(safe-area-inset-bottom, 0px), 6px); }
   .prs-win-btns { padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px); }
 
+  /* Mobile: cover.jpg é portrait 1054×1492. Com cover escala pela altura
+     e recorta ~17% das bordas horizontais (personagens somem).
+     Contain mostra a imagem completa com fundo escuro abaixo. */
+  .start-cover-bg {
+    object-fit: contain;
+    object-position: center 6%;
+  }
+  .screen-start-cover {
+    background: linear-gradient(180deg, #060612 0%, #12001e 55%, #000 100%);
+  }
+
   /* Prevent button overflow on medium-small phones */
   .start-cover-btn {
     max-width: calc(100vw - 48px);
@@ -2693,6 +2704,29 @@ html, body {
     padding-left: 16px;
     padding-right: 16px;
   }
+}
+
+/* Hint de primeiro toque — aparece antes do botão Jogar */
+.start-tap-hint {
+  position: relative;
+  z-index: 2;
+  padding: 32px 24px max(52px, env(safe-area-inset-bottom, 20px));
+  text-align: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  animation: hintPulse 1.6s ease infinite;
+}
+
+/* Botão e rodapé surgem com fade-in após primeiro toque */
+.start-cover-content-in {
+  animation: coverContentIn 0.4s ease both;
+}
+
+@keyframes coverContentIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 
