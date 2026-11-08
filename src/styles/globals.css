@@ -223,7 +223,7 @@ html, body {
 .btn-start:hover, .btn-start:focus { transform: scale(1.06); box-shadow: 0 8px 40px rgba(255,200,0,0.7); outline: none; }
 .btn-start:active { transform: scale(0.98); }
 
-.start-footer { color: var(--text-secondary); font-size: 0.78rem; opacity: 0.7; }
+.start-footer { color: var(--text-secondary); font-size: 0.78rem; opacity: 0.7; text-align: center; }
 
 /* === HERO SELECT === */
 .screen-hero-select {
@@ -2411,6 +2411,16 @@ html, body {
   .dsk-left  { grid-area: left; }
   .app-main  { grid-area: main; max-width: none; }
   .dsk-right { grid-area: right; }
+
+  /* On desktop, contain the cover screen to the main column (not full viewport) */
+  .screen-start-cover {
+    position: relative;
+    inset: unset;
+    max-width: none;
+    /* Restore min-height (.screen-start-cover resets it to unset on mobile) */
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
 }
 
 .dsk-sidebar {
@@ -2665,6 +2675,24 @@ html, body {
   }
   .wm-dpad { margin-bottom: max(env(safe-area-inset-bottom, 0px), 6px); }
   .prs-win-btns { padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px); }
+
+  /* Prevent button overflow on medium-small phones */
+  .start-cover-btn {
+    max-width: calc(100vw - 48px);
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+@media (max-width: 360px) {
+  .start-cover-btn {
+    font-size: 1.3rem;
+    padding: 14px 24px;
+  }
+  .start-cover-content {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 
 

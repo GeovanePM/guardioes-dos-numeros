@@ -7,7 +7,8 @@ export default function OpeningScene({ onFinish, panels: customPanels, chapterTa
   const [expanded, setExpanded] = useState(false)
   const [imageZoom, setImageZoom] = useState(false)
 
-  useEffect(() => { soundEngine.startTheme('story'); return () => {} }, [])
+  // 'story' theme starts when the user opens the card — not on mount.
+  // This lets the 'opening' theme from the landing page play briefly first.
 
   const panels = customPanels || OPENING
   const panel = panels[index]
@@ -36,9 +37,9 @@ export default function OpeningScene({ onFinish, panels: customPanels, chapterTa
             alt=""
             className="story-card-preview-img"
             style={{ cursor: 'pointer' }}
-            onClick={() => setExpanded(true)}
+            onClick={() => { soundEngine.startTheme('story'); setExpanded(true) }}
           />
-          <button className="story-card-tap-btn" onClick={() => setExpanded(true)}>
+          <button className="story-card-tap-btn" onClick={() => { soundEngine.startTheme('story'); setExpanded(true) }}>
             📖 Clique aqui para ler
           </button>
         </div>
