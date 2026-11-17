@@ -3483,3 +3483,150 @@ html, body {
   cursor: pointer;
   padding: 0;
 }
+
+/* === LOGIN SCREEN === */
+.login-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0d0d1a 0%, #1a0030 60%, #0d1a30 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--bg-card);
+  border-radius: 24px;
+  border: 1px solid rgba(120, 60, 220, 0.3);
+  box-shadow: 0 0 40px rgba(120, 60, 220, 0.2), var(--shadow-lg);
+  padding: 36px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.login-logo {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(120, 60, 220, 0.5);
+  box-shadow: 0 0 20px rgba(120, 60, 220, 0.3);
+}
+
+.login-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-align: center;
+  margin-top: 4px;
+}
+
+.login-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.login-error {
+  width: 100%;
+  background: rgba(200, 50, 50, 0.15);
+  border: 1px solid rgba(200, 50, 50, 0.4);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  color: #ff8888;
+  text-align: center;
+}
+
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.login-input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(120, 60, 220, 0.35);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.12em;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-input::placeholder {
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.login-input:focus {
+  border-color: rgba(120, 60, 220, 0.8);
+  box-shadow: 0 0 0 3px rgba(120, 60, 220, 0.15);
+}
+
+.login-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #6b21d4, #4f1b99);
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 16px rgba(107, 33, 212, 0.4);
+}
+
+.login-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+.login-btn:active:not(:disabled) { transform: translateY(0); }
+.login-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.login-hint {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.55;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Badge de escola autenticada (sidebar desktop) */
+.dsk-escola-badge {
+  margin-top: auto;
+  padding: 10px 12px;
+  background: rgba(107, 33, 212, 0.12);
+  border: 1px solid rgba(107, 33, 212, 0.25);
+  border-radius: 10px;
+  text-align: center;
+}
+.dsk-escola-nome  { font-size: 0.72rem; font-weight: 700; color: var(--text-primary); display: block; }
+.dsk-escola-code  { font-size: 0.62rem; color: var(--text-secondary); letter-spacing: 0.08em; }
+.dsk-escola-sair  {
+  margin-top: 6px;
+  font-size: 0.65rem;
+  color: rgba(160,100,220,0.7);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: underline;
+}
+.dsk-escola-sair:hover { color: #ff8888; }

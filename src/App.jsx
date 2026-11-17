@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useProgress } from './hooks/useProgress.js'
+import { useAuth } from './hooks/useAuth.js'
 import { STORIES, FINALE } from './data/stories.js'
 import { HEROES } from './data/heroes.js'
 import { soundEngine } from './audio/soundEngine.js'
@@ -11,6 +12,7 @@ import Battle from './components/screens/Battle.jsx'
 import PhaseResultScreen from './components/screens/PhaseResultScreen.jsx'
 import ComicPanel from './components/screens/ComicPanel.jsx'
 import Ending from './components/screens/Ending.jsx'
+import LoginScreen from './components/screens/LoginScreen.jsx'
 import './styles/globals.css'
 
 const ROOM_API = import.meta.env.VITE_ROOM_API_URL ?? ''
@@ -152,6 +154,7 @@ class ErrorBoundary extends React.Component {
 export default function App() {
   const [screen, setScreen] = useState({ name: 'start' })
   const [muted,  setMuted]  = useState(false)
+  const { escola, login, logout, isAuthenticated } = useAuth()
   const { progress, completePhase, markFirstType, hasSeenFirstType, getHeroProgress, resetHero, resetAll } = useProgress()
 
   // missão
@@ -305,6 +308,10 @@ export default function App() {
     return <StartScreen onStart={goHeroSelect} task={task} />
   }
 
+  if (!isAuthenticated) {
+    return <LoginScreen onSuccess={login} />
+  }
+
   const heroId      = screen.heroId || null
   const hero        = heroId ? HEROES[heroId] : null
   const heroProgress = heroId ? progress[heroId] : null
@@ -329,6 +336,15 @@ export default function App() {
               <span>🛡️ Galdios</span>
               <span>⭐ Nia</span>
             </div>
+          </div>
+        )}
+        {escola && (
+          <div className="dsk-escola-badge">
+            <span className="dsk-escola-nome">{escola.nome}</span>
+            <span className="dsk-escola-code">{escola.access_code}</span>
+            <button className="dsk-escola-sair" onClick={logout} aria-label="Sair">
+              Sair
+            </button>
           </div>
         )}
       </aside>
