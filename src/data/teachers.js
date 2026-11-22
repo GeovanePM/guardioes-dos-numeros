@@ -81,5 +81,38 @@ export const TEACHER_TIPS = {
       'Leia todas as pistas antes de responder. Às vezes a última pista é a chave!',
       'Em problemas de "quem é o mais alto/pesado", desenhe uma linha e posicione cada pessoa.'
     ]
+  },
+
+  // ── Capítulo 11 — Medidas de Superfície e Volume ──────────────────
+  geometry: {
+    firstTime: '📐 Capítulo 11 do livro: Medidas de Superfície e Volume! Aprendemos que ÁREA mede o espaço de uma superfície (em cm² ou m²) e VOLUME mede o espaço dentro de um sólido (em cm³). Fórmulas principais: Área do retângulo = comprimento × largura | Área do quadrado = lado × lado | Volume = comprimento × largura × altura.',
+    hints: [
+      '📖 Livro Cap. 11 — Área do retângulo = comprimento × largura. Ex: 5 cm × 3 cm = 15 cm².',
+      '📖 Livro Cap. 11 — Área do quadrado = lado × lado. Lembre: todos os lados são iguais!',
+      '📖 Livro Cap. 11 — Perímetro = soma de todos os lados. Retângulo: P = 2 × (comprimento + largura).',
+      '📖 Livro Cap. 11 — 1 metro quadrado (m²) é a área de um quadrado de 1 m de lado. Área de quarto e sala se mede em m².',
+      '📖 Livro Cap. 11 — Azulejos e lajotas: calcule a área = comprimento × largura. O resultado é a quantidade de peças necessárias.',
+      '📖 Livro Cap. 11 — Volume do paralelepípedo (caixa) = comprimento × largura × altura. Resultado em cm³.',
+      '📖 Livro Cap. 11 — Volume do cubo = aresta × aresta × aresta. Todos os 6 lados são iguais!',
+      '📖 Livro Cap. 11 — Cubinhos empilhados: o total é comprimento × largura × altura (cada cubinho tem 1 cm³).',
+      '📖 Livro Cap. 11 — Área do triângulo = (base × altura) ÷ 2. Não esqueça de dividir por 2 no final!'
+    ]
+  },
+
+  // ── Capítulo 10 — Probabilidade e Estatística ─────────────────────
+  statistics: {
+    firstTime: '📊 Capítulo 10 do livro: Probabilidade e Estatística! Aprendemos a coletar dados, ler tabelas e gráficos de barras, calcular amplitude e entender probabilidade. Palavras-chave: Amplitude = maior valor − menor valor | Probabilidade = casos favoráveis ÷ total de casos possíveis.',
+    hints: [
+      '📖 Livro Cap. 10 — Em tabelas, leia o título e os cabeçalhos antes de responder. Encontre o dado pedido na linha ou coluna certa.',
+      '📖 Livro Cap. 10 — Amplitude = maior valor − menor valor do conjunto de dados.',
+      '📖 Livro Cap. 10 — Gráfico de barras: a altura da barra mostra o valor. Compare as barras para responder.',
+      '📖 Livro Cap. 10 — Pesquisa censitária entrevista TODOS. Pesquisa amostral entrevista apenas uma parte do grupo.',
+      '📖 Livro Cap. 10 — Total da pesquisa = some todos os valores da tabela ou de todas as barras do gráfico.',
+      '📖 Livro Cap. 10 — Probabilidade = número de casos favoráveis ÷ total de casos possíveis. Resultado é uma fração!',
+      '📖 Livro Cap. 10 — Dado tem 6 faces (1 a 6). Probabilidade de qualquer número = 1/6.',
+      '📖 Livro Cap. 10 — Moeda tem 2 faces: cara (C) e coroa (X). Probabilidade de cara = 1/2.',
+      '📖 Livro Cap. 10 — Roleta: veja quantas partes iguais tem. Prob. de cada cor = partes dessa cor ÷ total de partes.',
+      '📖 Livro Cap. 10 — Bolinhas numa urna: probabilidade = bolinhas da cor pedida ÷ total de bolinhas.'
+    ]
   }
 }

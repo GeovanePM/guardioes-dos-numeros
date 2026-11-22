@@ -68,15 +68,15 @@ const VILLAIN_PHASE_MSGS = [
 ]
 const MESTRE_BATTLE_MSG = [
   null,
-  'Com calma e foco, a matemática vence qualquer desafio!',
-  'Não se deixem intimidar! Cada pergunta tem uma resposta certa!',
-  'Lembrem das dicas! Frações, problemas e lógica são suas armas!',
-  'Você chegou na metade! A matemática está do seu lado.',
-  'Fase 5! Vocês já provaram que são guardiões de verdade!',
-  'A cada fase, vocês ficam mais fortes. A matemática é seu poder!',
-  'Sete fases! Impressionante! Confie no que aprendemos juntos!',
-  'Quase lá! Oito fases de pura dedicação. Eu acredito em você!',
-  'A batalha final se aproxima! Uma fase de cada vez. Respira fundo!',
+  'Com calma e foco, a matemática vence qualquer desafio! Use o botão de dica se precisar.',
+  'Não se deixem intimidar! Lembre das fórmulas de área do Cap. 11 do livro.',
+  'Lembrem: Área = comp. × largura | Probabilidade = favoráveis ÷ possíveis. Vocês conseguem!',
+  'Metade do caminho! Se travar, peça a dica — ela mostra a página do livro para revisar.',
+  'Fase 5! Cap. 10 e 11 são suas armas. Tabelas, gráficos, área, volume — você sabe!',
+  'Seis fases! Lembre do Cap. 11: volume é comp. × largura × altura. Vai com tudo!',
+  'Fase 7 — desafio alto! Revise probabilidade no Cap. 10 e volume no Cap. 11 se precisar.',
+  'Oito fases de dedicação! Cada dica tem a página do livro — use sem medo!',
+  'A batalha final se aproxima! Respira fundo, lembra das fórmulas e vai com confiança!',
 ]
 
 export default function Battle({
@@ -251,7 +251,7 @@ export default function Battle({
             <div className="phase-rules">
               <span>5 perguntas</span>
               <Hearts count={3} max={3} />
-              <span>{externalQuestions ? '📚 Questões da Matéria' : 'Frações · Problemas · Lógica'}</span>
+              <span>{externalQuestions ? '📚 Questões da Matéria' : '📐 Geometria · 📊 Estatística · 📋 Problemas'}</span>
             </div>
           </div>
 
@@ -314,7 +314,7 @@ export default function Battle({
           </div>
           <div className="bvq-bubble-area">
             <span className={`q-type-badge-sm bg-${heroId}`}>
-              {{ fraction: '÷ Fração', problem: '📋 Problema', logic: '🧩 Lógica', external: '📚 Matéria' }[currentQ?.questionType]}
+              {{ fraction: '÷ Fração', problem: '📋 Problema', logic: '🧩 Lógica', geometry: '📐 Geometria', statistics: '📊 Estatística', external: '📚 Matéria' }[currentQ?.questionType]}
             </span>
             <MangaBubble
               type="shout"
