@@ -49,7 +49,7 @@ const GRASS_COLOR = { mitos: '#061220', pampee: '#120e00', galdios: '#120400', n
 const PATH_COLOR  = { mitos: '#0a1e32', pampee: '#1a1400', galdios: '#1c0600', nia: '#0c0018' }
 const TREE_EMOJI  = { mitos: '⚡', pampee: '🌿', galdios: '🪨', nia: '💫' }
 
-export default function WorldMap({ heroId, heroProgress, onBattle, onBack, lastWonPhase }) {
+export default function WorldMap({ heroId, heroProgress, onBattle, onBack, lastWonPhase, heroesComplete = 0 }) {
   const hero = HEROES[heroId]
   const villain = VILLAINS[hero.villain]
   const HeroArt  = HERO_ART[heroId]
@@ -157,7 +157,9 @@ export default function WorldMap({ heroId, heroProgress, onBattle, onBack, lastW
           <span className="wm-win-icon">🏆</span>
           <span className="wm-win-text">
             {winBanner === 10
-              ? 'Missão completa! Você venceu!'
+              ? heroesComplete >= 4
+                ? '🏆 Todos os heróis venceram! O final foi desbloqueado!'
+                : `Fase 10 conquistada! ${heroesComplete}/4 heróis completaram — continue com os outros!`
               : `Fase ${winBanner} conquistada!`}
           </span>
         </div>

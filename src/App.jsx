@@ -221,7 +221,19 @@ export default function App() {
   function handleResultContinue(heroId, phase) {
     const comicPhases = [2, 4, 6, 8]
     const heroStories = STORIES[heroId] || []
-    if (phase === 10) { setScreen({ name: 'finale', heroId }); return }
+    if (phase === 10) {
+      // Finale só aparece quando TODOS os 4 heróis completaram a fase 10
+      const allHeroes = ['mitos', 'pampee', 'galdios', 'nia']
+      const allDone = allHeroes.every(id =>
+        id === heroId || progress[id]?.phasesCompleted?.includes(10)
+      )
+      if (allDone) {
+        setScreen({ name: 'finale', heroId })
+      } else {
+        goWorldMap(heroId, phase)
+      }
+      return
+    }
     if (comicPhases.includes(phase)) {
       const comicIndex = comicPhases.indexOf(phase)
       if (comicIndex < heroStories.length) {
@@ -256,6 +268,7 @@ export default function App() {
         onBattle={(phase) => goPhase(s.heroId, phase)}
         onBack={goHeroSelect}
         lastWonPhase={s.lastWonPhase}
+        heroesComplete={['mitos','pampee','galdios','nia'].filter(id => progress[id]?.phasesCompleted?.includes(10)).length}
       />
     )
     if (s.name === 'battle') return (
