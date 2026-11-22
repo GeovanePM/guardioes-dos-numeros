@@ -18,16 +18,6 @@ const FOCUS_TO_TYPE = {
   logica:      'statistics',
 }
 
-// Distribuições: geometry e statistics dominam (conteúdo da prova)
-// problem aparece 1× por batalha como reforço de interpretação
-const DISTRIBUTIONS = [
-  ['geometry', 'statistics', 'problem',    'geometry',   'statistics'],
-  ['statistics','geometry',  'statistics', 'geometry',   'problem'],
-  ['geometry',  'statistics','geometry',   'problem',    'statistics'],
-  ['statistics','geometry',  'problem',    'statistics', 'geometry'],
-  ['geometry',  'problem',   'statistics', 'geometry',   'statistics'],
-]
-
 function makeQuestion(type, phase) {
   if (type === 'geometry')   return { ...generateGeometryQuestion(phase),   questionType: type }
   if (type === 'statistics') return { ...generateStatisticsQuestion(phase), questionType: type }
@@ -37,7 +27,9 @@ function makeQuestion(type, phase) {
 }
 
 export function generateBattle(phase) {
-  return shuffle(DISTRIBUTIONS)[0].map(type => makeQuestion(type, phase))
+  // Fases 1-5 = Cap. 10 (Estatística) | Fases 6-10 = Cap. 11 (Geometria)
+  const type = phase <= 5 ? 'statistics' : 'geometry'
+  return Array.from({ length: 5 }, () => makeQuestion(type, phase))
 }
 
 // focus: string[] de 'geometria' | 'estatistica' | 'problemas'

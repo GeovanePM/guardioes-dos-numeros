@@ -68,15 +68,15 @@ const VILLAIN_PHASE_MSGS = [
 ]
 const MESTRE_BATTLE_MSG = [
   null,
-  'Com calma e foco, a matemática vence qualquer desafio! Use o botão de dica se precisar.',
-  'Não se deixem intimidar! Lembre das fórmulas de área do Cap. 11 do livro.',
-  'Lembrem: Área = comp. × largura | Probabilidade = favoráveis ÷ possíveis. Vocês conseguem!',
-  'Metade do caminho! Se travar, peça a dica — ela mostra a página do livro para revisar.',
-  'Fase 5! Cap. 10 e 11 são suas armas. Tabelas, gráficos, área, volume — você sabe!',
-  'Seis fases! Lembre do Cap. 11: volume é comp. × largura × altura. Vai com tudo!',
-  'Fase 7 — desafio alto! Revise probabilidade no Cap. 10 e volume no Cap. 11 se precisar.',
-  'Oito fases de dedicação! Cada dica tem a página do livro — use sem medo!',
-  'A batalha final se aproxima! Respira fundo, lembra das fórmulas e vai com confiança!',
+  'Capítulo 10 começa agora! Vamos aprender a ler tabelas. Qual categoria tem mais? Qual tem menos?',
+  'Fase 2 — Amplitude! Lembre: amplitude = maior valor − menor valor dos dados.',
+  'Fase 3 — Hora dos gráficos de barras! Leia o título e compare as barras com atenção.',
+  'Fase 4 — Censitária pesquisa TODOS. Amostral pesquisa uma PARTE. Você já sabe!',
+  'Fase 5 — Probabilidade! Casos favoráveis ÷ casos possíveis. Último do Cap. 10, vai fundo!',
+  'Capítulo 11 começa! Geometria: Área = comprimento × largura. Vamos dominar o espaço!',
+  'Fase 7 — Área em metros quadrados! Pense nos azulejos e lajotas da aula.',
+  'Fase 8 — Mais área aplicada! Cada cálculo certo enfraquece o inimigo.',
+  'Fase 9 — Volume! Caixa = comp. × largura × altura. Uma fase para a batalha final!',
 ]
 
 export default function Battle({

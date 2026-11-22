@@ -91,8 +91,76 @@ function amplitudeSimples() {
   }
 }
 
+function diferencaTabela() {
+  const temas = [
+    { categorias: ['Cachorro', 'Gato', 'Coelho', 'Peixe'], contexto: 'animal preferido' },
+    { categorias: ['Futebol', 'Vôlei', 'Basquete', 'Natação'], contexto: 'esporte favorito' },
+    { categorias: ['Chocolate', 'Morango', 'Baunilha', 'Limão'], contexto: 'sabor de sorvete' },
+  ]
+  const tema = pick(temas)
+  const [catA, catB] = shuffle(tema.categorias).slice(0, 2)
+  const valA = randInt(8, 20)
+  const valB = randInt(2, valA - 2)
+  const diff = valA - valB
+  const correct = `${diff} alunos`
+  const { options, correct: ci } = buildOptions(correct, [
+    `${diff + 3} alunos`, `${valA} alunos`, `${valB} alunos`
+  ])
+  return {
+    type: 'statistics',
+    question: `Pesquisa de ${tema.contexto}:\n${catA}: ${valA} votos | ${catB}: ${valB} votos\nQuantos alunos a mais votaram em ${catA} do que em ${catB}?`,
+    options, correct: ci,
+    explanation: `Diferença = ${catA} − ${catB} = ${valA} − ${valB} = ${diff} alunos.`
+  }
+}
+
+function somaCategoriasTabela() {
+  const temas = [
+    { cats: ['Banana', 'Maçã', 'Morango', 'Uva'], ctx: 'fruta preferida' },
+    { cats: ['Gato', 'Cachorro', 'Coelho', 'Peixe'], ctx: 'animal favorito' },
+    { cats: ['Futebol', 'Vôlei', 'Basquete', 'Natação'], ctx: 'esporte favorito' },
+  ]
+  const tema = pick(temas)
+  const [catA, catB, catC] = shuffle(tema.cats)
+  const valA = randInt(4, 15), valB = randInt(4, 15), valC = randInt(4, 15)
+  const total = valA + valB
+  const correct = `${total} alunos`
+  const { options, correct: ci } = buildOptions(correct, [
+    `${total + valC} alunos`, `${valA} alunos`, `${total + 3} alunos`
+  ])
+  return {
+    type: 'statistics',
+    question: `Tabela de ${tema.ctx}:\n${catA}: ${valA} | ${catB}: ${valB} | ${catC}: ${valC}\nQuantos alunos escolheram ${catA} OU ${catB}?`,
+    options, correct: ci,
+    explanation: `${catA} + ${catB} = ${valA} + ${valB} = ${total} alunos. Para juntar duas categorias, some os valores.`
+  }
+}
+
+function valorNaTabela() {
+  const temas = [
+    { categorias: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'], contexto: 'alunos presentes por dia' },
+    { categorias: ['Ana', 'Bruno', 'Carlos', 'Diana'], contexto: 'pontos no jogo' },
+    { categorias: ['Manhã', 'Tarde', 'Noite'], contexto: 'alunos por turno' },
+  ]
+  const tema = pick(temas)
+  const n = Math.min(tema.categorias.length, pick([3, 4]))
+  const cats = tema.categorias.slice(0, n)
+  const valores = cats.map(() => randInt(5, 30))
+  const idx = randInt(0, cats.length - 1)
+  const correct = `${valores[idx]}`
+  const outros = valores.filter((_, i) => i !== idx).map(v => `${v}`)
+  const { options, correct: ci } = buildOptions(correct, outros)
+  const tabela = cats.map((c, i) => `${c}: ${valores[i]}`).join(' | ')
+  return {
+    type: 'statistics',
+    question: `Tabela de ${tema.contexto}:\n${tabela}\nQual é o valor registrado para "${cats[idx]}"?`,
+    options, correct: ci,
+    explanation: `Na tabela, ${cats[idx]} tem o valor ${valores[idx]}.`
+  }
+}
+
 // ═══════════════════════════════════════════
-// MÉDIO (fases 4-6) — Gráficos e pesquisa
+// MÉDIO (fases 3-4) — Gráficos e pesquisa
 // ═══════════════════════════════════════════
 
 function lerGraficoBarras() {
@@ -157,8 +225,77 @@ function censitariaOuAmostral() {
   }
 }
 
+function diferencaBarras() {
+  const contextos = [
+    { itens: ['Manga', 'Laranja', 'Maçã'], ctx: 'frutas vendidas' },
+    { itens: ['Turma A', 'Turma B', 'Turma C'], ctx: 'acertos por turma' },
+    { itens: ['Março', 'Abril', 'Maio'], ctx: 'livros emprestados' },
+  ]
+  const c = pick(contextos)
+  const [a, b] = c.itens.slice(0, 2)
+  const valA = randInt(3, 10) * 10
+  const valB = randInt(1, valA / 10 - 1) * 10
+  const diff = valA - valB
+  const correct = `${diff}`
+  const { options, correct: ci } = buildOptions(correct, [
+    `${diff + 10}`, `${valA}`, `${diff - 10 > 0 ? diff - 10 : diff + 20}`
+  ])
+  return {
+    type: 'statistics',
+    question: `Gráfico de ${c.ctx}:\n${a}: ${valA} | ${b}: ${valB}\nQual é a diferença entre ${a} e ${b}?`,
+    options, correct: ci,
+    explanation: `${a} − ${b} = ${valA} − ${valB} = ${diff}.`
+  }
+}
+
+function totalGrafico() {
+  const temas = [
+    { itens: ['Segunda', 'Terça', 'Quarta', 'Quinta'], ctx: 'alunos por dia' },
+    { itens: ['Ana', 'Bruno', 'Carla', 'Diego'], ctx: 'pontos no torneio' },
+  ]
+  const tema = pick(temas)
+  const n = pick([3, 4])
+  const itens = tema.itens.slice(0, n)
+  const valores = itens.map(() => randInt(2, 9) * 10)
+  const total = valores.reduce((a, b) => a + b, 0)
+  const correct = `${total}`
+  const { options, correct: ci } = buildOptions(correct, [
+    `${total + 10}`, `${Math.max(...valores)}`, `${total - 20 > 0 ? total - 20 : total + 30}`
+  ])
+  const dados = itens.map((it, i) => `${it}: ${valores[i]}`).join(' | ')
+  return {
+    type: 'statistics',
+    question: `Gráfico de ${tema.ctx}:\n${dados}\nQual é o TOTAL somando todos os valores?`,
+    options, correct: ci,
+    explanation: `Total = ${valores.join(' + ')} = ${total}.`
+  }
+}
+
+function afirmacaoVerdadeira() {
+  const times = shuffle(['Futebol', 'Vôlei', 'Basquete', 'Natação']).slice(0, 3)
+  const valores = times.map(() => randInt(5, 25))
+  const max = Math.max(...valores)
+  const min = Math.min(...valores)
+  const timeMax = times[valores.indexOf(max)]
+  const timeMin = times[valores.indexOf(min)]
+  const amp = max - min
+  const verdadeira = `${timeMax} teve mais votos que ${timeMin}`
+  const { options, correct: ci } = buildOptions(verdadeira, [
+    `${timeMin} teve mais votos que ${timeMax}`,
+    `A amplitude é ${amp + 5}`,
+    `Todos tiveram o mesmo número de votos`,
+  ])
+  const tabela = times.map((t, i) => `${t}: ${valores[i]}`).join(' | ')
+  return {
+    type: 'statistics',
+    question: `Tabela de esporte favorito:\n${tabela}\nQual afirmação é VERDADEIRA?`,
+    options, correct: ci,
+    explanation: `${timeMax} teve ${max} votos e ${timeMin} teve ${min} votos. A amplitude é ${max} − ${min} = ${amp}.`
+  }
+}
+
 // ═══════════════════════════════════════════
-// DIFÍCIL (fases 7-9) — Probabilidade
+// DIFÍCIL (fase 5) — Probabilidade
 // ═══════════════════════════════════════════
 
 function probabilidadeBolinhas() {
@@ -245,8 +382,71 @@ function probabilidadeRoleta() {
   }
 }
 
+function probabilidadeComplementar() {
+  const total = pick([4, 5, 6, 8, 10])
+  const fav = randInt(1, total - 1)
+  const naoFav = total - fav
+  const cor = pick(['azul', 'vermelha', 'verde', 'amarela'])
+  const correct = `${naoFav}/${total}`
+  const { options, correct: ci } = buildOptions(correct, [
+    `${fav}/${total}`, `${naoFav}/${total + 1}`, `${fav + 1}/${total}`
+  ])
+  return {
+    type: 'statistics',
+    question: `Em uma sacola com ${total} bolinhas, ${fav} ${fav > 1 ? 'são' : 'é'} da cor ${cor}. Qual é a probabilidade de sortear uma bolinha que NÃO seja ${cor}?`,
+    options, correct: ci,
+    explanation: `Bolinhas que NÃO são ${cor}: ${total} − ${fav} = ${naoFav}. Probabilidade = ${naoFav}/${total}.`
+  }
+}
+
+function probabilidadeMoeda() {
+  const casos = [
+    { perg: 'cair CARA', correct: '1/2', expl: 'Moeda tem 2 faces: Cara e Coroa. Probabilidade de Cara = 1/2.' },
+    { perg: 'cair COROA', correct: '1/2', expl: 'Moeda tem 2 faces: Cara e Coroa. Probabilidade de Coroa = 1/2.' },
+  ]
+  const c = pick(casos)
+  const { options, correct: ci } = buildOptions(c.correct, ['1/4', '2/3', '1/3'])
+  return {
+    type: 'statistics',
+    question: `Ao lançar uma moeda, qual é a probabilidade de ${c.perg}?`,
+    options, correct: ci,
+    explanation: c.expl
+  }
+}
+
+function eventoImpossivel() {
+  const casos = [
+    {
+      perg: 'Um dado tem faces numeradas de 1 a 6. Qual resultado é IMPOSSÍVEL de acontecer?',
+      correct: 'Tirar o número 7',
+      wrong: ['Tirar o número 6', 'Tirar um número par', 'Tirar o número 1'],
+      expl: 'O dado só tem faces de 1 a 6. Tirar 7 é impossível — probabilidade = 0.'
+    },
+    {
+      perg: 'Uma sacola tem apenas bolinhas vermelhas e azuis. Qual resultado é IMPOSSÍVEL?',
+      correct: 'Sortear uma bolinha verde',
+      wrong: ['Sortear uma bolinha azul', 'Sortear uma bolinha vermelha', 'Sortear qualquer bolinha'],
+      expl: 'Não há bolinhas verdes. Sortear verde é impossível — probabilidade = 0.'
+    },
+    {
+      perg: 'Uma moeda tem cara e coroa. Qual resultado é IMPOSSÍVEL?',
+      correct: 'A moeda não cair em nenhuma face',
+      wrong: ['Cair cara', 'Cair coroa', 'Cair cara ou coroa'],
+      expl: 'Uma moeda sempre cai em cara ou coroa — a probabilidade de nenhuma face é 0.'
+    }
+  ]
+  const c = pick(casos)
+  const { options, correct: ci } = buildOptions(c.correct, c.wrong)
+  return {
+    type: 'statistics',
+    question: c.perg,
+    options, correct: ci,
+    explanation: c.expl
+  }
+}
+
 // ═══════════════════════════════════════════
-// CHEFE (fase 10)
+// CHEFE (não usado — estatística só vai até fase 5)
 // ═══════════════════════════════════════════
 
 function bossEstatistica() {
@@ -295,14 +495,14 @@ function bossProbabilidade() {
 }
 
 export function generateStatisticsQuestion(phase) {
-  const difficulty = phase <= 3 ? 'easy' : phase <= 6 ? 'medium' : phase <= 9 ? 'hard' : 'boss'
+  // Fases 1-2: fácil | 3-4: médio | 5: difícil
+  const difficulty = phase <= 2 ? 'easy' : phase <= 4 ? 'medium' : 'hard'
 
-  const easyTypes   = [lerTabelaMaiorMenor, amplitudeDados, totalDaPesquisa, amplitudeSimples]
-  const mediumTypes = [lerGraficoBarras, amplitudeGrafico, censitariaOuAmostral]
-  const hardTypes   = [probabilidadeBolinhas, probabilidadeDado, combinacoesMoedas, probabilidadeRoleta]
-  const bossTypes   = [bossEstatistica, bossProbabilidade, probabilidadeBolinhas, probabilidadeDado]
+  const easyTypes   = [lerTabelaMaiorMenor, amplitudeDados, totalDaPesquisa, amplitudeSimples, diferencaTabela, somaCategoriasTabela, valorNaTabela]
+  const mediumTypes = [lerGraficoBarras, amplitudeGrafico, censitariaOuAmostral, diferencaBarras, totalGrafico, afirmacaoVerdadeira]
+  const hardTypes   = [probabilidadeBolinhas, probabilidadeDado, combinacoesMoedas, probabilidadeRoleta, probabilidadeComplementar, probabilidadeMoeda, eventoImpossivel]
 
-  const typeMap = { easy: easyTypes, medium: mediumTypes, hard: hardTypes, boss: bossTypes }
+  const typeMap = { easy: easyTypes, medium: mediumTypes, hard: hardTypes }
   const generators = typeMap[difficulty]
   const gen = generators[Math.floor(Math.random() * generators.length)]
 
