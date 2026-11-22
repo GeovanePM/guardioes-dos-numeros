@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react'
 const STORAGE_KEY = 'guardioes_progress_v1'
 
 function freshHero() {
-  return { maxPhaseUnlocked: 1, phasesCompleted: [], comicsUnlocked: [], xp: 0, totalCorrect: 0, ending: false }
+  return { maxPhaseUnlocked: 1, phasesCompleted: [], comicsUnlocked: [], xp: 0, totalCorrect: 0, ending: false, phaseStats: {} }
 }
 
 function freshProgress() {
@@ -51,11 +51,22 @@ export function useProgress() {
   const completePhase = useCallback((heroId, phase, hearts, correctCount) => {
     updateAndSave(prev => {
       const hero = prev[heroId]
+      const wrongCount = 5 - correctCount
       const xpGained = correctCount * 50 + hearts * 25
 
       // Always accumulate XP and correct answers (reward replays too)
       hero.xp = (hero.xp || 0) + xpGained
       hero.totalCorrect = (hero.totalCorrect || 0) + correctCount
+
+      // Per-phase stats: best score and attempt count
+      if (!hero.phaseStats) hero.phaseStats = {}
+      const prev_stat = hero.phaseStats[phase] || { bestCorrect: 0, bestHearts: 0, attempts: 0, totalWrong: 0 }
+      hero.phaseStats[phase] = {
+        bestCorrect: Math.max(prev_stat.bestCorrect, correctCount),
+        bestHearts:  Math.max(prev_stat.bestHearts, hearts),
+        attempts:    prev_stat.attempts + 1,
+        totalWrong:  prev_stat.totalWrong + wrongCount,
+      }
 
       if (!hero.phasesCompleted.includes(phase)) {
         hero.phasesCompleted.push(phase)

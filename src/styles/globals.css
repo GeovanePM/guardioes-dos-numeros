@@ -499,6 +499,8 @@ html, body {
 .phase-label { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
 .phase-label-boss { color: #FF8888; }
 .phase-sublabel { font-size: 0.7rem; color: var(--text-secondary); }
+.phase-score { font-size: 0.7rem; font-weight: 700; color: #4CAF50; margin-top: 1px; }
+.phase-attempts { font-size: 0.65rem; color: var(--text-secondary); font-weight: 400; }
 
 .comics-notice {
   margin: 8px 24px 16px;

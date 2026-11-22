@@ -24,6 +24,7 @@ export default function PhaseMap({ heroId, heroProgress, onPhaseSelect, onBack }
   const xp = heroProgress?.xp || 0
   const totalCorrect = heroProgress?.totalCorrect || 0
   const ending = heroProgress?.ending || false
+  const phaseStats = heroProgress?.phaseStats || {}
 
   return (
     <div
@@ -95,6 +96,14 @@ export default function PhaseMap({ heroId, heroProgress, onPhaseSelect, onBack }
                     {isBoss ? villain.name : PHASE_LABELS[phase]}
                   </span>
                   {isBoss && <span className="phase-sublabel">Chefe Final</span>}
+                  {isCompleted && phaseStats[phase] && (
+                    <span className="phase-score">
+                      {phaseStats[phase].bestCorrect}/5 ✅
+                      {phaseStats[phase].attempts > 1 && (
+                        <span className="phase-attempts"> · {phaseStats[phase].attempts}×</span>
+                      )}
+                    </span>
+                  )}
                 </div>
               </div>
             )
